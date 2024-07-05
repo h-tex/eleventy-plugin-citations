@@ -1,0 +1,12 @@
+{% macro single (locator, number) %}
+	<dt>[<a href="#bib-{{ locator }}" class="reference" id="bib-{{ locator }}">{{ number }}</a>]</dt>
+	<dd>{{ locator }}</dd>
+{% endmacro %}
+
+{% macro list (refs) %}
+	<dl class="references">
+		{% for reference in refs %}
+			{{ single(reference, loop.index) }}
+		{% endfor %}
+	</dl>
+{% endmacro %}

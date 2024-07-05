@@ -1,0 +1,32 @@
+{
+  "name": "eleventy-plugin-citations",
+  "version": "0.0.1-alpha.1",
+  "description": "Citations & Bibliography for 11ty",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leaverou/eleventy-plugin-citations.git"
+  },
+  "keywords": [
+    "citeproc",
+    "citations",
+    "references",
+    "bibtex",
+    "bibliography",
+    "eleventy-plugin"
+  ],
+  "author": "Lea Verou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leaverou/eleventy-plugin-citations/issues"
+  },
+  "homepage": "https://github.com/leaverou/eleventy-plugin-citations#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0-alpha.14",
+    "release-it": "^17.4.1"
+  }
+}

@@ -1,0 +1,9 @@
+{% macro single (citation) -%}
+<a href="#bib-{{ citation.locator }}" class="reference" id="ref-bib-{{ citation.locator }}">{{ citation.number }}</a>
+{%- endmacro -%}
+
+<span class="citations">[
+	{%- for citation in citations -%}
+		{{ single(citation) }}{{ ", " if not loop.last }}
+	{%- endfor -%}
+]</span>
