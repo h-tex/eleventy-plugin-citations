@@ -7,7 +7,7 @@ let patterns = {};
 patterns.citation = /([-~!]*?)@([^\s;,\]]+)/;
 patterns.citations = new RegExp(`\\[\\s*(${patterns.citation.source})(\\s*[;,]\\s*(${patterns.citation.source}))*?\\s*\\]`, 'g');
 
-export default function parseCitations (content, refs) {
+export function parse (content, refs) {
 	return [...content.matchAll(patterns.citations)].map(match => {
 		let ret = {raw: match[0], start: match.index, end: match.index + match[0].length};
 		ret.citations = match[0].slice(1, -1) // Drop brackets
@@ -20,4 +20,18 @@ export default function parseCitations (content, refs) {
 
 		return ret;
 	});
+}
+
+export function render (content, refs, options) {
+	let all = parse(content, refs);
+
+	// Replace in reverse to avoid wrangling changing offsets
+	for (let i = all.length - 1; i >= 0; i--) {
+		let info = all[i];
+		let rendered = options.render(info);
+
+		content = content.slice(0, info.start) + rendered + content.slice(info.end);
+	}
+
+	return content;
 }

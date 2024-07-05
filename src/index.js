@@ -1,14 +1,6 @@
 import nunjucks from "nunjucks";
-import parseCitations from "./parse-citations.js";
+import * as citations from "./citations.js";
 
-/**
- * Citation parsing patterns.
- * Note we do not yet support complex citation styles like [@smith{ii, A, D-Z}, with a suffix],
- * [@smith, {pp. iv, vi-xi, (xv)-(xvii)} with suffix here], or [@smith{}, 99 years later]
- */
-let patterns = {};
-patterns.citation = /([-~!]*?)@([^\s;,\]]+)/;
-patterns.citations = new RegExp(`\\[\\s*(${patterns.citation.source})(\\s*[;,]\\s*(${patterns.citation.source}))*?\\s*\\]`, 'g');
 
 // Eleventy deep clones plain objects, but we want an actual reference to this so we can modify it during templating.
 class References {}
@@ -45,6 +37,7 @@ export default function (config, {
 		let refs = references[this.page.outputPath];
 
 		if (!refs) {
+			// First reference we encounter on this page
 			refs = references[this.page.outputPath] = [];
 
 			Object.defineProperty(this.page, "references", {
@@ -52,19 +45,12 @@ export default function (config, {
 					return references[this.outputPath];
 				}
 			});
+			console.log("context", this.ctx)
 		}
 
-		let all = parseCitations(content, refs);
-
-		// Replace in reverse otherwise indices will be off
-		for (let i = all.length - 1; i >= 0; i--) {
-			let info = all[i];
-			let rendered = nunjucks.render(citationTemplate, info);
-			// Replace with rendered citation in content
-			content = content.slice(0, info.start) + rendered + content.slice(info.end);
-		}
-
-		return content;
+		return citations.render(content, refs, {
+			render: info => nunjucks.render(citationTemplate, info)
+		});
 	}
 
 	config.addGlobalData("references", references);
