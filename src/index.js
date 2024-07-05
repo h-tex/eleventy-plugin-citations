@@ -42,10 +42,21 @@ export default function (config, {
 	citationTemplate = "_includes/_citations.njk"
 } = {}) {
 	function renderCitations (content) {
-		references[this.page.outputPath] ??= [];
 		let refs = references[this.page.outputPath];
+
+		if (!refs) {
+			refs = references[this.page.outputPath] = [];
+
+			Object.defineProperty(this.page, "references", {
+				get () {
+					return references[this.outputPath];
+				}
+			});
+		}
+
 		let all = parseCitations(content, refs);
 
+		// Replace in reverse otherwise indices will be off
 		for (let i = all.length - 1; i >= 0; i--) {
 			let info = all[i];
 			let rendered = nunjucks.render(citationTemplate, info);
@@ -59,13 +70,9 @@ export default function (config, {
 	config.addGlobalData("references", references);
 
 	config.addFilter("citations", renderCitations);
+	config.addFilter("references", function () {
+		return references;
+	});
 
 	config.addPairedShortcode("citations", renderCitations);
-
-	// config.addTransform("citations", async function (content) {
-	// 	// TODO provide a way to filter out certain files
-	// 	let {inputPath, outputPath} = this.page;
-	// 	console.log(inputPath, "→", outputPath);
-	// 	return processCitations(content, outputPath);
-	// });
 }

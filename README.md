@@ -73,7 +73,9 @@ The plugin adds the following:
 
 You use whichever of the two is convenient to pick up & format citations in your content.
 
-The plugin also adds a `references` global data object that you can iterate over to display your bibliography.
+The plugin also adds a `references` global data object that contains references for all pages, keyed by `page.outputpath`.
+For convenience, it also defines a `references` property on `page` so you can refer to the page’s references via `page.references`,
+which is basically equivalent to `references[page.outputPath]`.
 
 ## Limitations
 
