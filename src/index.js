@@ -45,7 +45,6 @@ export default function (config, {
 					return references[this.outputPath];
 				}
 			});
-			console.log("context", this.ctx)
 		}
 
 		return citations.render(content, refs, {
@@ -56,9 +55,5 @@ export default function (config, {
 	config.addGlobalData("references", references);
 
 	config.addFilter("citations", renderCitations);
-	config.addFilter("references", function () {
-		return references;
-	});
-
 	config.addPairedShortcode("citations", renderCitations);
 }
