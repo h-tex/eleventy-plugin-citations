@@ -1,4 +1,4 @@
-# eleventy-plugin-citations
+# eleventy-plugin-citations (WIP)
 
 This plugin parses Pandoc-style citations in any input files and replaces them with formatted references.
 It also stores the references in data that can be used to display a bibliography however and wherever you want.
@@ -80,7 +80,7 @@ which is basically equivalent to `references[page.outputPath]`.
 ## Limitations
 
 Still to do before release:
-- Formatting of references is not yet implemented.
+- **Formatting of references is not yet implemented.**
 - Currently only supports numbers for citations (numbers are determined by the order of the citations in the text).
 
 There are certain things I did not need, and thus are deprioritized (see wrt tight deadline above):
@@ -91,3 +91,7 @@ That said, as long as your citation template is a Nunjucks template, you should 
 This is because it imports Nunjucks directly and does not have access to the 11ty environment.
 
 Happy to merge PRs on these, I just don’t have the time to do them myself.
+
+**The plugin only supports Eleventy v3 and up.**
+I _may_ be open in merging PRs to support Eleventy v2 if the changes are minimal,
+but I’m not interested in making extensive changes to the codebase to cater to the past.
