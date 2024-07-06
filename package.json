@@ -18,6 +18,7 @@
     "references",
     "bibtex",
     "bibliography",
+    "academic-writing",
     "eleventy-plugin"
   ],
   "author": "Lea Verou",
@@ -29,5 +30,11 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0-alpha.14",
     "release-it": "^17.4.1"
+  },
+  "dependencies": {
+    "biblatex-csl-converter": "^2.1.0",
+    "citeproc": "^2.4.63",
+    "locale-en-us": "^0.0.2",
+    "style-vancouver": "^0.0.2"
   }
 }

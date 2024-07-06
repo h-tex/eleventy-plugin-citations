@@ -1,37 +1,21 @@
+import fs from "fs";
 import nunjucks from "nunjucks";
+import CSL from "citeproc";
+// import * as util from "./util.js";
 import * as citations from "./citations.js";
+import * as bib from "./bib.js";
 
-
-// Eleventy deep clones plain objects, but we want an actual reference to this so we can modify it during templating.
+// Eleventy deep clones plain objects, but we want an actual reference to these so we can modify them during templating.
 class References {}
 const references = new References();
 
-export function processCitations (content, {
-	key,
-	render = c => `[${c.number}]`
-}) {
-	references[key] ??= [];
-	let refs = references[key];
-
-	content = content.replaceAll(patterns.citations, (match) => {
-		let citations = match.slice(1, -1) // Drop brackets
-							 .trim().split(";").map(cite => cite.trim()).filter(Boolean)
-							 .map(citation => { // Parse citation
-								let [, flags, locator] = citation.match(patterns.citation);
-								let number = refs.indexOf(locator) + 1 || refs.push(locator);
-								return {number, locator, flags};
-							 });
-
-		return render(citations);
-	});
-
-	// console.log(`Processed ${refs.length} citations for ${key}`);
-
-	return content;
-}
+class Bibliography {}
+const bib_data = new Bibliography();
 
 export default function (config, {
-	citationTemplate = "_includes/_citations.njk"
+	citationTemplate = "_includes/_citations.njk",
+	style,
+	locale,
 } = {}) {
 	function renderCitations (content) {
 		let refs = references[this.page.outputPath];
@@ -52,8 +36,33 @@ export default function (config, {
 		});
 	}
 
+	if (typeof style === "string") {
+		style = fs.readFileSync(style, "utf-8");
+	}
+
+	if (typeof locale === "string") {
+		locale = fs.readFileSync(locale, "utf-8");
+	}
+
 	config.addGlobalData("references", references);
+	config.addGlobalData("bib_data", bib_data);
 
 	config.addFilter("citations", renderCitations);
 	config.addPairedShortcode("citations", renderCitations);
+
+	config.addFilter("format_reference", function (locator, bibliography = this.ctx.bibliography) {
+		if (!bibliography) {
+			throw new Error("No bibliography file(s) provided, either as data or via the filter.");
+		}
+
+		bibliography = Array.isArray(bibliography) ? bibliography : [bibliography];
+
+		let merged = {};
+		for (let source of bibliography) {
+			let data = typeof source === "object" ? source : (bib_data[source] ??= bib.parse(source));
+			Object.assign(merged, data);
+		}
+
+		return bib.format.call(this, locator, {bibliography: merged, style, locale});
+	})
 }

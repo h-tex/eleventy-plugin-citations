@@ -4,7 +4,7 @@
  * [@smith, {pp. iv, vi-xi, (xv)-(xvii)} with suffix here], or [@smith{}, 99 years later]
  */
 let patterns = {};
-patterns.citation = /([-~!]*?)@([^\s;,\]]+)/;
+patterns.citation = /([-~!]*?)@([^\s;\]]+)/;
 patterns.citations = new RegExp(`\\[\\s*(${patterns.citation.source})(\\s*[;,]\\s*(${patterns.citation.source}))*?\\s*\\]`, 'g');
 
 export function parse (content, refs) {
