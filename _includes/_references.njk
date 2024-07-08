@@ -1,12 +1,6 @@
-{% macro single (id) %}
-	<dt><a href="#bib-{{ id }}" class="reference" id="bib-{{ id }}">{{ id | bibliography_citation }}</a></dt>
-	<dd>{{ id | bibliography_entry | safe }}</dd>
-{% endmacro %}
-
-{% macro list (refs) %}
-	<dl class="references">
-		{% for reference in refs.references %}
-			{{ single(reference) }}
-		{% endfor %}
-	</dl>
-{% endmacro %}
+<dl class="references">
+	{% for reference in references %}
+		<dt><a href="#bib-{{ reference }}" class="reference" id="bib-{{ reference }}">{{ reference | bibliography_citation }}</a></dt>
+		<dd>{{ reference | bibliography_entry | safe }}</dd>
+	{% endfor %}
+</dl>

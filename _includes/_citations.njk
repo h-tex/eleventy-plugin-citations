@@ -1,13 +1,9 @@
-{% macro single (citation, text = citation.id) -%}
-<a href="#bib-{{ citation.id }}" class="reference" id="ref-bib-{{ citation.id }}">{{ text }}</a>
-{%- endmacro -%}
-
 <span class="citations">
 	{%- for part in parts -%}
 		{%- if part.citation -%}
-			{{ single(part.citation, part.text) }}
+			<a href="#bib-{{ part.citation.id }}" class="reference" id="ref-bib-{{ part.citation.id }}">{{ part.text }}</a>
 		{%- else -%}
-			{{ part }}
+			{{ part | safe }}
 		{%- endif -%}
 	{%- endfor -%}
 </span>

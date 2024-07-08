@@ -132,12 +132,26 @@ By default, the plugin will use [its internal citation template](_includes/_cita
 ### Rendering the bibliography
 
 The plugin adds the following:
-- A `references` global data object that contains references for all pages, keyed by `page.outputpath`
+- A `referencesByPage` global data object that contains references for all pages, keyed by `page.outputpath`
 - A `references` property on `page` so you can refer to the page’s references via `page.references`,
-which is basically equivalent to `references[page.outputPath]`.
+which is basically equivalent to `referencesByPage[page.outputPath]`.
 Note that this is defined when we encounter the first reference, so on pages with no citations it will be `undefined`, not an empty array.
 - A `bibliography_citation` filter that takes an id as input and returns a formatted citation for use in the bibliography.
 - A `bibliography_entry` filter that takes an id as input and returns a formatted reference for use in the bibliography.
+
+You can use these however you want to generate the bibliography.
+This is an example:
+
+```njk
+<h2>Bibliography</h2>
+
+<dl class="references">
+	{% for reference in references %}
+		<dt><a href="#bib-{{ reference }}" class="reference" id="bib-{{ reference }}">{{ reference | bibliography_citation }}</a></dt>
+		<dd>{{ reference | bibliography_entry | safe }}</dd>
+	{% endfor %}
+</dl>
+```
 
 ## Citation syntax
 

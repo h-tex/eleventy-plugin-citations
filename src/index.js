@@ -1,4 +1,5 @@
 import fs from "fs";
+import { fileURLToPath } from "url";
 import nunjucks from "nunjucks";
 
 import { toArray } from "./util.js";
@@ -43,7 +44,7 @@ export default function (config, {
 
 			Object.defineProperty(this.page, "references", {
 				get () {
-					return references[this.outputPath];
+					return references[this.outputPath]?.references ?? [];
 				}
 			});
 		}
@@ -53,7 +54,7 @@ export default function (config, {
 		});
 	}
 
-	config.addGlobalData("references", references);
+	config.addGlobalData("referencesByPage", references);
 
 	config.addFilter("citations", renderCitations);
 	config.addPairedShortcode("citations", renderCitations);
