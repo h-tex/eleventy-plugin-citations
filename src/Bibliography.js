@@ -6,6 +6,7 @@ import locale_en_us from "locale-en-us";
 import { toArray, readTextFile } from "./util.js";
 
 const patterns = {
+	citationDelimiters: /\s*(?:<\/?sup>|[()\[\]–,])+\s*/g,
 	referenceOutput: /^<div class="csl-entry">\s*<div class="csl-left-margin">\s*(?<citation>.+?)\s*<\/div>\s*<div class="csl-right-inline">\s*(?<entry>[\s\S]+?)\s*<\/div>\s*<\/div>$/,
 }
 
@@ -114,8 +115,9 @@ export default class Bibliography {
 		let ret = [];
 		let offset = 0; // character offset
 		let index = 0; // index of citation
+
 		// Iterate over delimiters. Anything between consecutive delimiters is a citation
-		for (let match of text.matchAll(/\s*[()\[\]–,]\s*/g)) {
+		for (let match of text.matchAll(patterns.citationDelimiters)) {
 			let delimiter = match[0];
 			let start = match.index;
 			let end = start + delimiter.length;
@@ -127,6 +129,7 @@ export default class Bibliography {
 			ret.push(delimiter);
 			offset = end;
 		}
+
 		result = {parts: ret, text, uuid};
 		// console.log(citations.map(c => c.id), result);
 
