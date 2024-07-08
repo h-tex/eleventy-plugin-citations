@@ -33,12 +33,16 @@ This also means you can call it as many times as you want on the same content an
 ### Feature: Full templating customization
 
 Most plugins were generating the HTML for the citations and references in JS, providing varying levels of customization.
-I wanted to have the references as part of the data cascade and use actual templates for displaying them.
+I wanted to have the references as part of the data cascade and use actual templates for displaying them which provides unparalleled flexibility.
 
-### Feature: Multiple citation sequences
+### Feature: Multiple citation sequences that can be linked up correctly
 
 A lot of my content was Markdown converted from LaTeX with [pandoc](https://pandoc.org/).
-I had several citation sequences (e.g. `[@foo; @bar]`), which many plugins did not support.
+I had several citation sequences (e.g. `[@foo; @bar]`), which many plugins did not support or had limited support (e.g. only the first was linked).
+
+This is due to how [citeproc](https://www.npmjs.com/package/citeproc) works: it returns a single string with all the citations in it and no info about what is what.
+This plugin does **a lot of work** to reverse engineer citeproc’s output to figure out what is what.
+Yes, even sequence ranges (e.g. `[1, 3–5, 18, 34–60]`) are correctly linked up.
 
 ## Installation
 
@@ -69,29 +73,6 @@ eleventyConfig.addPlugin(citations, {
 	style: "acm-sigchi.csl",
 });
 ```
-
-## Options
-
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `citationTemplate` | `string` | - | The path to the Nunjucks template that will be used to format the citations. |
-| `citationRender` | `function` | _(See prose)_ | A function that takes info about a citation sequence and returns an HTML string |
-| `style` | `string` or `object` | [`style-nature`](https://www.npmjs.com/package/style-nature) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
-| `locale` | `string` or `object` | [`locale-en-us`](https://www.npmjs.com/package/locale-en-us) | The locale to use for formatting the references, either as an object or a path to a locale CSL XML file. |
-| `bibliography` | `string` or `string[]` | - | One or more global BiBTeX files. These will be merged with any BiBTeX files provided via the data cascade and will have lower priority. |
-
-There are NPM packages for common CSL styles and locales:
-- Styles: [APA](https://www.npmjs.com/package/style-apa),
-[Chicago](https://www.npmjs.com/package/style-chicago),
-[MLA](https://www.npmjs.com/package/style-mla),
-[Vancouver](https://www.npmjs.com/package/style-vancouver),
-[Nature](https://www.npmjs.com/package/style-nature) (default),
-[RSC](https://www.npmjs.com/package/style-rsc),
-- Locales: [en-US](https://www.npmjs.com/package/locale-en-us) (default),
-[en-GB](https://www.npmjs.com/package/locale-en-gb),
-[fr-FR](https://www.npmjs.com/package/locale-fr-fr),
-[de-DE](https://www.npmjs.com/package/locale-de-de),
-[es-ES](https://www.npmjs.com/package/locale-es-es),
 
 ## Usage
 
@@ -170,6 +151,43 @@ We also parse the same citation flags from [`markdown-it-biblatex`](https://gith
 | `[@{https://example.com/bib?name=foobar&date=2000}, p.  33]` | URLs as keys | 🚫 | 🚫 |
 | `[see @doe99]` | Prefix | 🚫 | 🚫 |
 | `[@doe99, and *passim*]` | Suffix | 🚫 | 🚫 |
+
+## Confuguration Options
+
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `citationTemplate` | `string` | - | The path to the Nunjucks template that will be used to format the citations. |
+| `citationRender` | `function` | _(See prose)_ | A function that takes info about a citation sequence and returns an HTML string |
+| `style` | `string` or `object` | [`style-nature`](https://www.npmjs.com/package/style-nature) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
+| `locale` | `string` or `object` | [`locale-en-us`](https://www.npmjs.com/package/locale-en-us) | The locale to use for formatting the references, either as an object or a path to a locale CSL XML file. |
+| `bibliography` | `string` or `string[]` | - | One or more global BiBTeX files. In case of duplicate keys, later wins. These will be merged with any BiBTeX files provided via the data cascade and will have lower priority. |
+
+## CSL Styles and Locales
+
+[CSL](https://citationstyles.org/) is an XML-based standard to describe citation styles.
+Several popular locales and styles are available as NPM packages, though this plugin has not been testeed with all of them.
+An easy way to contribute would be to try the plugin with a new style and add it to the list below (and send PRs to fix any bugs you found!)
+
+### Styles
+
+| Style | Tested? | Text citation | Bibliography citation |
+| ----- | ------- | ------------- | --------------------- |
+| [Vancouver](https://www.npmjs.com/package/style-vancouver) | ✅ | (1) | 1. |
+| [Nature](https://www.npmjs.com/package/style-nature) | ✅ | <sup>1</sup> | [1] |
+| [APA](https://www.npmjs.com/package/style-apa) | ✅ | (Doe et al., 1999) | [doe99] |
+| [Chicago](https://www.npmjs.com/package/style-chicago) | 🚫 | | |
+| [MLA](https://www.npmjs.com/package/style-mla) | 🚫 | | |
+| [RSC](https://www.npmjs.com/package/style-rsc) | 🚫 | | |
+
+### Locales
+
+| Locale | Tested? |
+| ------ | ------- |
+| [en-US](https://www.npmjs.com/package/locale-en-us) | ✅ (default) |
+| [en-GB](https://www.npmjs.com/package/locale-en-gb) | 🚫 |
+| [fr-FR](https://www.npmjs.com/package/locale-fr-fr) | 🚫 |
+| [de-DE](https://www.npmjs.com/package/locale-de-de) | 🚫 |
+| [es-ES](https://www.npmjs.com/package/locale-es-es) | 🚫 |
 
 ## Limitations
 

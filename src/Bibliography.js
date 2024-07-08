@@ -122,7 +122,9 @@ export default class Bibliography {
 				}, [], []);
 				return result[0][1];
 			});
+
 			parts = parseFormattedCitationSequence(text, citations, formattedCitations);
+
 		}
 
 		return {parts, text, uuid};
@@ -233,15 +235,16 @@ function parseFormattedCitationSequence (originalText, citations, formattedCitat
 	// We’ll have to make some assumptions about the citation format for now, such as what the delimiters can contain.
 	let {prefix, text, suffix} = unwrapCitation(originalText);
 
+	let parts;
+
 	if (citations.length === 1) {
 		// Whole thing is a single citation
-		return [prefix, {citation: citations[0], text}, suffix];
+		parts = [{citation: citations[0], text}];
 	}
-
 	// If we’re here, we have multiple citations
-	if (formattedCitations) {
+	else if (formattedCitations) {
 		formattedCitations = formattedCitations.map(c => unwrapCitation(c).text.trim());
-		let parts = splitLossless(text, formattedCitations).map(part => {
+		parts = splitLossless(text, formattedCitations).map(part => {
 			if (part.type === "delimiter") {
 				// Here delimiters are the actual citations
 				return {citation: citations[part.typeIndex], text: part.text};
@@ -250,10 +253,6 @@ function parseFormattedCitationSequence (originalText, citations, formattedCitat
 				return part.text;
 			}
 		});
-
-		parts.unshift(prefix);
-		parts.push(suffix);
-		return parts;
 	}
 	else {
 		// Find what the separator is
@@ -262,13 +261,11 @@ function parseFormattedCitationSequence (originalText, citations, formattedCitat
 		let delimiter = text.indexOf(";") > -1 ? /\s*;\s*/g : /\s*[–,]\s*/g;
 
 		if (text.match(delimiter).length !== citations.length - 1) {
-			//console.warn(`Mismatch between number of citations (${citations.length}) and delimiters (${delimiters.length}) for ${originalText}.`);
+			// Mismatch between number of citations and delimiters
 			return null;
 		}
 
-		let parts = splitLossless(text, delimiter);
-
-		return parts.map(part => {
+		parts = splitLossless(text, delimiter).map(part => {
 			if (part.type === "delimiter") {
 				return part.text;
 			}
@@ -277,4 +274,8 @@ function parseFormattedCitationSequence (originalText, citations, formattedCitat
 			}
 		});
 	}
+
+	parts.unshift(prefix);
+	parts.push(suffix);
+	return parts;
 }
