@@ -1,4 +1,4 @@
-# eleventy-plugin-citations (WIP)
+# eleventy-plugin-citations
 
 This plugin parses Pandoc-style citations (`[@id1; @id2]`) in any input files and replaces them with formatted references.
 It also stores the references in data that can be used to display a bibliography however and wherever you want.
@@ -12,6 +12,7 @@ Your needs may be different, so I suggest you check them out too:
 
 | Package | Repo | Citation parser | Bbliography parser | Reference formatter |
 | ------- | ---- | --------------- | ------------- | ------------- |
+[eleventy-plugin-citations](https://www.npmjs.com/package/eleventy-plugin-citations) (this plugin) | [leaverou/eleventy-plugin-citations](https://github.com/leaverou/eleventy-plugin-citations) | [_(Custom)_](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/citations.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) [citeproc](https://www.npmjs.com/package/citeproc) |
 [@arothuis/markdown-it-biblatex](https://www.npmjs.com/package/@arothuis/markdown-it-biblatex)	| [arothuis/markdown-it-biblatex](https://github.com/arothuis/markdown-it-biblatex)		| [_(Custom)_](https://github.com/arothuis/markdown-it-biblatex/blob/main/src/parser.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) [citeproc](https://www.npmjs.com/package/citeproc) |
 [eleventy-plugin-citeproc](https://www.npmjs.com/package/eleventy-plugin-citeproc)				| [Myllaume/eleventy-plugin-citeproc](https://github.com/Myllaume/eleventy-plugin-citeproc)	| [@zettlr/citr](https://www.npmjs.com/package/@zettlr/citr) | N/A _(Only supports JSON)_ | [citeproc](https://www.npmjs.com/package/citeproc) |
 [eleventy-plugin-bibtex](https://www.npmjs.com/package/eleventy-plugin-bibtex)					| [Savjee/eleventy-plugin-bibtex](https://github.com/Savjee/eleventy-plugin-bibtex)		| N/A _(No citation support)_ | [citation-js](https://www.npmjs.com/package/citation-js) | [citation-js](https://www.npmjs.com/package/citation-js) |
