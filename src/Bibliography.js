@@ -3,10 +3,9 @@ import { BibLatexParser, CSLExporter } from "biblatex-csl-converter";
 import CSL from "citeproc";
 import defaultStyle from "style-nature";
 import locale_en_us from "locale-en-us";
-import { toArray, readTextFile } from "./util.js";
+import { toArray, readTextFile, splitLossless } from "./util.js";
 
 const patterns = {
-	citationDelimiters: /\s*(?:<\/?sup>|[()\[\]–,])+\s*/g,
 	referenceOutput: /^<div class="csl-entry">\s*<div class="csl-left-margin">\s*(?<citation>.+?)\s*<\/div>\s*<div class="csl-right-inline">\s*(?<entry>[\s\S]+?)\s*<\/div>\s*<\/div>$/,
 }
 
@@ -107,39 +106,26 @@ export default class Bibliography {
 			properties: {noteIndex: 0}
 		}, [], []);
 
-		// Problem: citeproc returns the whole citation cluster, with brackets and separators
-		// but we want to wrap each citation in a template for linking etc!
-		// What to do?
-		// We’ll have to make some assumptions about the citation format for now, such as what the delimiters can contain.
 		let [, text, uuid] = result[0];
-		let parts = [];
-		let offset = 0; // character offset
-		let index = 0; // index of citation
 
-		// Iterate over delimiters. Anything between consecutive delimiters is a citation
-		for (let match of text.matchAll(patterns.citationDelimiters)) {
-			let delimiter = match[0];
-			let start = match.index;
-			let end = start + delimiter.length;
-			if (start > offset) {
-				// Citation
-				let citation = citations[index++];
-				parts.push({citation, text: text.slice(offset, start)});
-			}
-			parts.push(delimiter);
-			offset = end;
+		let parts = parseFormattedCitationSequence(text, citations);
+
+		if (parts === null) {
+			// Sequence could not be parsed into parts directly
+			// Because not all citations are present in the output
+			// E.g. [1, 3–5, 18, 34–60]
+			// We need to help it along by serializing each citation individually and passing it to the function
+			let formattedCitations = citations.map(c => {
+				let result = this.citeproc.appendCitationCluster({
+					citationItems: [c],
+					properties: {noteIndex: 0}
+				}, [], []);
+				return result[0][1];
+			});
+			parts = parseFormattedCitationSequence(text, citations, formattedCitations);
 		}
 
-		if (parts.length === 0) {
-			// No delimiters. Possibly a format we don’t recognize. Just return the whole thing.
-			parts.push({citation: citations[0], text});
-		}
-
-		result = {parts, text, uuid};
-		// console.log(citations.map(c => c.id), result);
-
-		return result;
-		// return this.references.indexOf(citations[0].id) + 1;
+		return {parts, text, uuid};
 	}
 
 	build () {
@@ -169,6 +155,11 @@ export default class Bibliography {
 
 		return this.formatted[id];
 	}
+
+	/**
+	 * Bibliography data from BibTeX files, keyed on path
+	 */
+	static data = {};
 
 	/**
 	 * Read a bibliography file, parse it, and convert it to CSL.
@@ -211,6 +202,79 @@ export default class Bibliography {
 
 		return this.data[path];
 	}
+}
 
-	static data = {};
+const suffixes = {
+	"(": ")",
+	"[": "]",
+	"<sup>": "</sup>",
+}
+
+function unwrapCitation (text, prefix) {
+	prefix ??= text.match(/(<sup>|\(|\[)/)?.[0] ?? "";
+	let suffix = suffixes[prefix] ?? "";
+
+	if (!prefix) {
+		// Unknown format or no prefix/suffix
+		return text;
+	}
+
+	text = text.slice(prefix.length, -suffix.length);
+	return {prefix, text, suffix};
+}
+
+/**
+ * Takes a formatted citation sequence that is produced by citeproc and returns an array of parts and objects that can be used to render it.
+ */
+function parseFormattedCitationSequence (originalText, citations, formattedCitations) {
+	// Problem: citeproc returns the whole citation cluster, with brackets and separators
+	// but we want to wrap each citation in a template for linking etc!
+	// What to do?
+	// We’ll have to make some assumptions about the citation format for now, such as what the delimiters can contain.
+	let {prefix, text, suffix} = unwrapCitation(originalText);
+
+	if (citations.length === 1) {
+		// Whole thing is a single citation
+		return [prefix, {citation: citations[0], text}, suffix];
+	}
+
+	// If we’re here, we have multiple citations
+	if (formattedCitations) {
+		formattedCitations = formattedCitations.map(c => unwrapCitation(c).text.trim());
+		let parts = splitLossless(text, formattedCitations).map(part => {
+			if (part.type === "delimiter") {
+				// Here delimiters are the actual citations
+				return {citation: citations[part.typeIndex], text: part.text};
+			}
+			else {
+				return part.text;
+			}
+		});
+
+		parts.unshift(prefix);
+		parts.push(suffix);
+		return parts;
+	}
+	else {
+		// Find what the separator is
+		// E.g. Nature uses semicolons since the actual citations can contain all sorts of characters
+		// E.g. (Daskalova et al., 2021; Liang et al., 2016; Watson, 2013)
+		let delimiter = text.indexOf(";") > -1 ? /\s*;\s*/g : /\s*[–,]\s*/g;
+
+		if (text.match(delimiter).length !== citations.length - 1) {
+			//console.warn(`Mismatch between number of citations (${citations.length}) and delimiters (${delimiters.length}) for ${originalText}.`);
+			return null;
+		}
+
+		let parts = splitLossless(text, delimiter);
+
+		return parts.map(part => {
+			if (part.type === "delimiter") {
+				return part.text;
+			}
+			else {
+				return {citation: citations[part.typeIndex], text: part.text};
+			}
+		});
+	}
 }
