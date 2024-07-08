@@ -13,7 +13,7 @@ Your needs may be different, so I suggest you check them out too:
 | Package | Repo | Citation parser | Bbliography parser | Reference formatter |
 | ------- | ---- | --------------- | ------------- | ------------- |
 [eleventy-plugin-citations](https://www.npmjs.com/package/eleventy-plugin-citations) (this plugin) | [leaverou/eleventy-plugin-citations](https://github.com/leaverou/eleventy-plugin-citations) | [_(Custom)_](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/citations.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) [citeproc](https://www.npmjs.com/package/citeproc) |
-[@arothuis/markdown-it-biblatex](https://www.npmjs.com/package/@arothuis/markdown-it-biblatex)	| [arothuis/markdown-it-biblatex](https://github.com/arothuis/markdown-it-biblatex)		| [_(Custom)_](https://github.com/arothuis/markdown-it-biblatex/blob/main/src/parser.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) [citeproc](https://www.npmjs.com/package/citeproc) |
+[@arothuis/markdown-it-biblatex](https://www.npmjs.com/package/@arothuis/markdown-it-biblatex)	| [arothuis/markdown-it-biblatex](https://github.com/arothuis/markdown-it-biblatex)		| [_(Custom)_](https://github.com/arothuis/markdown-it-biblatex/blob/main/src/parser.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) | [citeproc](https://www.npmjs.com/package/citeproc) |
 [eleventy-plugin-citeproc](https://www.npmjs.com/package/eleventy-plugin-citeproc)				| [Myllaume/eleventy-plugin-citeproc](https://github.com/Myllaume/eleventy-plugin-citeproc)	| [@zettlr/citr](https://www.npmjs.com/package/@zettlr/citr) | N/A _(Only supports JSON)_ | [citeproc](https://www.npmjs.com/package/citeproc) |
 [eleventy-plugin-bibtex](https://www.npmjs.com/package/eleventy-plugin-bibtex)					| [Savjee/eleventy-plugin-bibtex](https://github.com/Savjee/eleventy-plugin-bibtex)		| N/A _(No citation support)_ | [citation-js](https://www.npmjs.com/package/citation-js) | [citation-js](https://www.npmjs.com/package/citation-js) |
 [markdown-it-bibliography](https://www.npmjs.com/package/markdown-it-bibliography)				| [DerDrodt/markdown-it-bibliography](https://github.com/DerDrodt/markdown-it-bibliography)	| [_(Custom)_](https://github.com/DerDrodt/markdown-it-bibliography/blob/main/src/citation-parser.ts) | [biblatex-csl-converter-ts](https://www.npmjs.com/package/biblatex-csl-converter-ts) | [citeproc](https://www.npmjs.com/package/citeproc) |
@@ -41,9 +41,10 @@ I wanted to have the references as part of the data cascade and use actual templ
 A lot of my content was Markdown converted from LaTeX with [pandoc](https://pandoc.org/).
 I had several citation sequences (e.g. `[@foo; @bar]`), which many plugins did not support or had limited support (e.g. only the first was linked).
 
-This is due to how [citeproc](https://www.npmjs.com/package/citeproc) works: it returns a single string with all the citations in it and no info about what is what.
-This plugin does **a lot of work** to reverse engineer citeproc’s output to figure out what is what.
-Yes, even sequence ranges (e.g. `[1, 3–5, 18, 34–60]`) are correctly linked up.
+This is due to how [citeproc](https://www.npmjs.com/package/citeproc) works that is at the core of all but one of them:
+it returns a single string with all the citations in it and no metadata about what is what.
+This plugin does [**a lot of work**](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/Bibliography.js#L111-L128) to reverse engineer citeproc’s output to figure this out.
+Yes, even sequence ranges (e.g. `[1, 3–5, 18, 34–60]`) are correctly linked up!
 
 ## Installation
 
