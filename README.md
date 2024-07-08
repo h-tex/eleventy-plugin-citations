@@ -75,7 +75,7 @@ eleventyConfig.addPlugin(citations, {
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `citationTemplate` | `string` | `"_includes/_citations.njk"` | The path to the Nunjucks template that will be used to format the citations. |
-| `style` | `string` or `object` | [`style-vancouver`](https://www.npmjs.com/package/style-vancouver) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
+| `style` | `string` or `object` | [`style-nature`](https://www.npmjs.com/package/style-nature) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
 | `locale` | `string` or `object` | [`locale-en-us`](https://www.npmjs.com/package/locale-en-us) | The locale to use for formatting the references, either as an object or a path to a locale CSL XML file. |
 | `bibliography` | `string` or `string[]` | - | One or more global BiBTeX files. These will be merged with any BiBTeX files provided via the data cascade and will have lower priority. |
 
@@ -83,8 +83,8 @@ There are NPM packages for common CSL styles and locales:
 - Styles: [APA](https://www.npmjs.com/package/style-apa),
 [Chicago](https://www.npmjs.com/package/style-chicago),
 [MLA](https://www.npmjs.com/package/style-mla),
-[Vancouver](https://www.npmjs.com/package/style-vancouver) (default),
-[Nature](https://www.npmjs.com/package/style-nature),
+[Vancouver](https://www.npmjs.com/package/style-vancouver),
+[Nature](https://www.npmjs.com/package/style-nature) (default),
 [RSC](https://www.npmjs.com/package/style-rsc),
 - Locales: [en-US](https://www.npmjs.com/package/locale-en-us) (default),
 [en-GB](https://www.npmjs.com/package/locale-en-gb),
@@ -113,13 +113,15 @@ We also parse the same citation flags from [`markdown-it-biblatex`](https://gith
 
 | Example | Description | Parsed? | Supported? |
 | ------- | ----------- | ------- | ---------- |
-| `[@id]` | Single citation | ✅ | ✅ |
-| `[@id1; @id2]` | Multiple citations separated by semicolons | ✅ | ✅ |
-| `[-@id1]` | Suppress author | ✅ | 🚫 |
-| `[!@id1]` | Author-only | ✅ | 🚫 |
-| `[~@id1]` | Inline | ✅ | 🚫 |
-| `[@id#p. 3]` | Locator | 🚫 | 🚫 |
-| `@id` | Citation without brackets | 🚫 | 🚫 |
+| `[@doe99]` | Single citation | ✅ | ✅ |
+| `[@doe99; @smith2000]` | Multiple citations separated by semicolons | ✅ | ✅ |
+| `[-@doe99]` | Suppress author | ✅ | 🚫 |
+| `[!@doe99]` | Author-only | ✅ | 🚫 |
+| `[~@doe99]` | Inline | ✅ | 🚫 |
+| `@doe99` | Citation without brackets | 🚫 | 🚫 |
+| `[@{https://example.com/bib?name=foobar&date=2000}, p.  33]` | URLs as keys | 🚫 | 🚫 |
+| `[see @doe99]` | Prefix | 🚫 | 🚫 |
+| `[@doe99, and *passim*]` | Suffix | 🚫 | 🚫 |
 
 ## Limitations
 

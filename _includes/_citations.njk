@@ -1,9 +1,13 @@
-{% macro single (citation) -%}
-<a href="#bib-{{ citation.locator }}" class="reference" id="ref-bib-{{ citation.locator }}">{{ citation.number }}</a>
+{% macro single (citation, text = citation.id) -%}
+<a href="#bib-{{ citation.id }}" class="reference" id="ref-bib-{{ citation.id }}">{{ text }}</a>
 {%- endmacro -%}
 
-<span class="citations">[
-	{%- for citation in citations -%}
-		{{ single(citation) }}{{ ", " if not loop.last }}
+<span class="citations">
+	{%- for part in parts -%}
+		{%- if part.citation -%}
+			{{ single(part.citation, part.text) }}
+		{%- else -%}
+			{{ part }}
+		{%- endif -%}
 	{%- endfor -%}
-]</span>
+</span>
