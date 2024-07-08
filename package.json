@@ -35,6 +35,6 @@
     "biblatex-csl-converter": "^2.1.0",
     "citeproc": "^2.4.63",
     "locale-en-us": "^0.0.2",
-    "style-nature": "^0.0.2"
+    "style-vancouver": "^0.0.2"
   }
 }

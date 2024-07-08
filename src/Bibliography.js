@@ -1,7 +1,7 @@
 import fs from "fs";
 import { BibLatexParser, CSLExporter } from "biblatex-csl-converter";
 import CSL from "citeproc";
-import defaultStyle from "style-nature";
+import defaultStyle from "style-vancouver";
 import locale_en_us from "locale-en-us";
 import { toArray, readTextFile, splitLossless } from "./util.js";
 

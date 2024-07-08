@@ -158,7 +158,7 @@ We also parse the same citation flags from [`markdown-it-biblatex`](https://gith
 | ---- | ---- | ------- | ----------- |
 | `citationTemplate` | `string` | - | The path to the Nunjucks template that will be used to format the citations. |
 | `citationRender` | `function` | _(See prose)_ | A function that takes info about a citation sequence and returns an HTML string |
-| `style` | `string` or `object` | [`style-nature`](https://www.npmjs.com/package/style-nature) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
+| `style` | `string` or `object` | [`style-vancouver`](https://www.npmjs.com/package/style-vancouver) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
 | `locale` | `string` or `object` | [`locale-en-us`](https://www.npmjs.com/package/locale-en-us) | The locale to use for formatting the references, either as an object or a path to a locale CSL XML file. |
 | `bibliography` | `string` or `string[]` | - | One or more global BiBTeX files. In case of duplicate keys, later wins. These will be merged with any BiBTeX files provided via the data cascade and will have lower priority. |
 
@@ -172,7 +172,7 @@ An easy way to contribute would be to try the plugin with a new style and add it
 
 | Style | Tested? | Text citation | Bibliography citation |
 | ----- | ------- | ------------- | --------------------- |
-| [Vancouver](https://www.npmjs.com/package/style-vancouver) | ✅ | (1) | 1. |
+| [Vancouver](https://www.npmjs.com/package/style-vancouver) | ✅ (default) | (1) | 1. |
 | [Nature](https://www.npmjs.com/package/style-nature) | ✅ | <sup>1</sup> | [1] |
 | [APA](https://www.npmjs.com/package/style-apa) | ✅ | (Doe et al., 1999) | [doe99] |
 | [Chicago](https://www.npmjs.com/package/style-chicago) | 🚫 | | |
