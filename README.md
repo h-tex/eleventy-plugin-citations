@@ -74,7 +74,8 @@ eleventyConfig.addPlugin(citations, {
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `citationTemplate` | `string` | `"_includes/_citations.njk"` | The path to the Nunjucks template that will be used to format the citations. |
+| `citationTemplate` | `string` | - | The path to the Nunjucks template that will be used to format the citations. |
+| `citationRender` | `function` | _(See prose)_ | A function that takes info about a citation sequence and returns an HTML string |
 | `style` | `string` or `object` | [`style-nature`](https://www.npmjs.com/package/style-nature) | The CSL style to use for formatting the references, either as an object or a path to a CSL XML file. |
 | `locale` | `string` or `object` | [`locale-en-us`](https://www.npmjs.com/package/locale-en-us) | The locale to use for formatting the references, either as an object or a path to a locale CSL XML file. |
 | `bibliography` | `string` or `string[]` | - | One or more global BiBTeX files. These will be merged with any BiBTeX files provided via the data cascade and will have lower priority. |
@@ -102,6 +103,31 @@ The plugin adds the following:
 
 You use whichever of the two is convenient to pick up & format citations in your content.
 See below for the [citation syntax](#citation-syntax).
+
+These do double duty: they pick up references for bibliography, and they format the citations in the text.
+**this means that only text that has gone through one of the two will be collected for the bibliography.**
+For the filter, you need to also add `| safe` after it so that the HTML it returns can be rendered.
+
+```njk
+{{ "See [@doe99; @smith2000]" | citations | safe }}
+```
+
+You can provide your own template for rendering the citation via the `citationTemplate` option,
+or a function that takes the citation info and returns the text of the formatted citation via the `citationRender` option.
+
+By default, the plugin will use [its internal citation template](_includes/_citations.njk) for this, which looks like this:
+
+```njk
+<span class="citations">
+	{%- for part in parts -%}
+		{%- if part.citation -%}
+			<a href="#bib-{{ part.citation.id }}" class="reference" id="ref-bib-{{ part.citation.id }}">{{ part.text }}</a>
+		{%- else -%}
+			{{ part | safe }}
+		{%- endif -%}
+	{%- endfor -%}
+</span>
+```
 
 ### Rendering the bibliography
 
@@ -133,13 +159,13 @@ We also parse the same citation flags from [`markdown-it-biblatex`](https://gith
 
 ## Limitations
 
-### Essential things not yet implemented
+### Citation syntax
 
-This plugin is a work in progress and not yet in usable form.
+While you provide CSL files for the style, the plugin had to make certain assumptions to afford the templating flexibility it provides,
+since citeproc provides chunks of text or HTML, with no granularity for the different parts of the citation.
 
-Still to do before release:
-- **Formatting of references is not yet implemented.**
-- Currently only supports outputting numbers for citations (numbers are determined by the order of the citations in the text).
+Locators are currently not supported in the citation syntax.
+They are mostly parsed, but not output.
 
 ### Fundamental limitations
 

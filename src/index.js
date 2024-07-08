@@ -11,10 +11,23 @@ export { Bibliography };
 class ReferencesByPage {}
 const references = new ReferencesByPage();
 
+const __dirname = fileURLToPath(new URL("..", import.meta.url));
+
+function defaultRenderCitation (citationTemplate) {
+	if (citationTemplate) {
+		return info => nunjucks.render(citationTemplate, info);
+	}
+	else {
+		let template = fs.readFileSync(__dirname + "/_includes/_citations.njk", "utf8");
+		return info => nunjucks.renderString(template, info);
+	}
+
+}
+
 export default function (config, {
-	citationTemplate = "_includes/_citations.njk",
-	style,
-	locale,
+	citationTemplate,
+	citationRender = defaultRenderCitation(citationTemplate),
+	style, locale, // defaults set in Bibliography
 	bibliography,
 } = {}) {
 	let globalBibliography = toArray(bibliography);
@@ -36,7 +49,7 @@ export default function (config, {
 		}
 
 		return citations.render(content, refs, {
-			render: info => nunjucks.render(citationTemplate, info)
+			render: citationRender,
 		});
 	}
 
