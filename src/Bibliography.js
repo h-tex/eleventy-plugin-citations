@@ -109,10 +109,10 @@ export default class Bibliography {
 
 		// Problem: citeproc returns the whole citation cluster, with brackets and separators
 		// but we want to wrap each citation in a template for linking etc!
-		// what to do?
-		// We’ll make some assumptions about the citation format for now, such as that the citation is in
+		// What to do?
+		// We’ll have to make some assumptions about the citation format for now, such as what the delimiters can contain.
 		let [, text, uuid] = result[0];
-		let ret = [];
+		let parts = [];
 		let offset = 0; // character offset
 		let index = 0; // index of citation
 
@@ -124,13 +124,18 @@ export default class Bibliography {
 			if (start > offset) {
 				// Citation
 				let citation = citations[index++];
-				ret.push({citation, text: text.slice(offset, start)});
+				parts.push({citation, text: text.slice(offset, start)});
 			}
-			ret.push(delimiter);
+			parts.push(delimiter);
 			offset = end;
 		}
 
-		result = {parts: ret, text, uuid};
+		if (parts.length === 0) {
+			// No delimiters. Possibly a format we don’t recognize. Just return the whole thing.
+			parts.push({citation: citations[0], text});
+		}
+
+		result = {parts, text, uuid};
 		// console.log(citations.map(c => c.id), result);
 
 		return result;
