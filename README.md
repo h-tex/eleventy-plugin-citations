@@ -165,19 +165,22 @@ We also parse the same citation flags from [`markdown-it-biblatex`](https://gith
 ## CSL Styles and Locales
 
 [CSL](https://citationstyles.org/) is an XML-based standard to describe citation styles.
-Several popular locales and styles are available as NPM packages, though this plugin has not been testeed with all of them.
-An easy way to contribute would be to try the plugin with a new style and add it to the list below (and send PRs to fix any bugs you found!)
+Several popular locales and styles are available as NPM packages.
 
 ### Styles
+
+This plugin has been tested and verified to work with the most popular styles, and a few others.
 
 | Style | Tested? | Text citation | Bibliography citation |
 | ----- | ------- | ------------- | --------------------- |
 | [Vancouver](https://www.npmjs.com/package/style-vancouver) | ✅ (default) | (1) | 1. |
 | [Nature](https://www.npmjs.com/package/style-nature) | ✅ | <sup>1</sup> | [1] |
 | [APA](https://www.npmjs.com/package/style-apa) | ✅ | (Doe et al., 1999) | [doe99] |
-| [Chicago](https://www.npmjs.com/package/style-chicago) | 🚫 | | |
-| [MLA](https://www.npmjs.com/package/style-mla) | 🚫 | | |
-| [RSC](https://www.npmjs.com/package/style-rsc) | 🚫 | | |
+| [Chicago](https://www.npmjs.com/package/style-chicago) | ✅ | (Doe et al., 1999) | [doe99] |
+| [MLA](https://www.npmjs.com/package/style-mla) | ✅ | (Doe et al., 1999) | [doe99] |
+| [RSC](https://www.npmjs.com/package/style-rsc) | ✅ | <sup>1</sup> | 1 |
+
+Note: Nature, APA, and Chicago use the same overall citation style and appear to only differ in terms of how they format bibliography entries.
 
 ### Locales
 

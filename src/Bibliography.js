@@ -259,8 +259,8 @@ function parseFormattedCitationSequence (originalText, citations, formattedCitat
 		// E.g. Nature uses semicolons since the actual citations can contain all sorts of characters
 		// E.g. (Daskalova et al., 2021; Liang et al., 2016; Watson, 2013)
 		let delimiter = text.indexOf(";") > -1 ? /\s*;\s*/g : /\s*[–,]\s*/g;
-
-		if (text.match(delimiter).length !== citations.length - 1) {
+		let matches = text.match(delimiter) ?? [];
+		if (matches.length !== citations.length - 1) {
 			// Mismatch between number of citations and delimiters
 			return null;
 		}
