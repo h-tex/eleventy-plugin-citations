@@ -1,12 +1,12 @@
-{% macro single (id, number) %}
-	<dt>[<a href="#bib-{{ id }}" class="reference" id="bib-{{ id }}">{{ number }}</a>]</dt>
-	<dd>{{ id | format_reference | safe }}</dd>
+{% macro single (id) %}
+	<dt><a href="#bib-{{ id }}" class="reference" id="bib-{{ id }}">{{ id | bibliography_citation }}</a></dt>
+	<dd>{{ id | bibliography_entry | safe }}</dd>
 {% endmacro %}
 
 {% macro list (refs) %}
 	<dl class="references">
 		{% for reference in refs.references %}
-			{{ single(reference, loop.index) }}
+			{{ single(reference) }}
 		{% endfor %}
 	</dl>
 {% endmacro %}

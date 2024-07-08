@@ -5,6 +5,10 @@ import defaultStyle from "style-nature";
 import locale_en_us from "locale-en-us";
 import { toArray, readTextFile } from "./util.js";
 
+const patterns = {
+	referenceOutput: /^<div class="csl-entry">\s*<div class="csl-left-margin">\s*(?<citation>.+?)\s*<\/div>\s*<div class="csl-right-inline">\s*(?<entry>[\s\S]+?)\s*<\/div>\s*<\/div>$/,
+}
+
 export default class Bibliography {
 	/**
 	 * First citations only
@@ -138,6 +142,15 @@ export default class Bibliography {
 
 		// Build an object that maps ids to entries
 		this.formatted = Object.fromEntries(ids.map((id, i) => [id, entries[i]]));
+
+		// citeproc returns a string of HTML, but we want the citation and bibliography entries separately
+		for (let id in this.formatted) {
+			let html = this.formatted[id];
+			let match = html.trim().match(patterns.referenceOutput);
+			let ret = match ? {...match.groups} : {};
+			ret.html = html;
+			this.formatted[id] = ret;
+		}
 	}
 
 	format (id) {
