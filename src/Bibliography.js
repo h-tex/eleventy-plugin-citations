@@ -247,7 +247,7 @@ function parseFormattedCitationSequence (originalText, citations, formattedCitat
 		parts = splitLossless(text, formattedCitations).map(part => {
 			if (part.type === "delimiter") {
 				// Here delimiters are the actual citations
-				return {citation: citations[part.typeIndex], text: part.text};
+				return {citation: citations[part.patternIndex], text: part.text};
 			}
 			else {
 				return part.text;
