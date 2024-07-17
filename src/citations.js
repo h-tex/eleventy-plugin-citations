@@ -23,7 +23,14 @@ patterns.citations = new RegExp(`\\[\\s*(${patterns.citation.source})(\\s*[;,]\\
  * @returns {ParsedCitation}
  */
 export function parseCitation (text) {
-	let {groups} = text.match(patterns.citationDetails);
+	let match = text.match(patterns.citationDetails);
+
+	if (!match) {
+		console.warn(`[eleventy-plugin-citations] Skipping invalid citation: ${text}`);
+		return null;
+	}
+
+	let {groups} = match;
 	let flags = {
 		suppressAuthor: groups.flags.includes("-"),
 		authorOnly: groups.flags.includes("!"),
@@ -65,7 +72,7 @@ export function parseCitationSequence (text) {
 	return text.slice(1, -1) // Drop brackets
 			.trim().split(";")
 			.map(cite => cite.trim()).filter(Boolean) // Drop empty strings
-			.map(parseCitation);
+			.map(parseCitation).filter(Boolean); // Drop invalid citations
 }
 
 /**
