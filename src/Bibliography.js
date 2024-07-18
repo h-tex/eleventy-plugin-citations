@@ -134,10 +134,15 @@ export default class Bibliography {
 			});
 
 			parts = parseFormattedCitationSequence(text, citations, formattedCitations);
-
 		}
 
-		return {parts, text, uuid};
+		let impliedCitations = citations.filter(c => !parts.some(part => part.citation === c));
+
+		if (impliedCitations.length > 0) {
+			parts.push(...impliedCitations.map(citation => ({citation, text: ""})));
+		}
+
+		return {parts, text, uuid, impliedCitations};
 	}
 
 	build () {
@@ -222,6 +227,9 @@ const suffixes = {
 	"<sup>": "</sup>",
 }
 
+/**
+ * Remove the prefix and suffix (brackets, parens etc) from a citation.
+ */
 function unwrapCitation (text, prefix) {
 	prefix ??= text.match(/(<sup>|\(|\[)/)?.[0] ?? "";
 	let suffix = suffixes[prefix] ?? "";
@@ -236,7 +244,11 @@ function unwrapCitation (text, prefix) {
 }
 
 /**
- * Takes a formatted citation sequence that is produced by citeproc and returns an array of parts and objects that can be used to render it.
+ * Map a formatted citation sequence back to specific citations.
+ * @param {string} originalText - a formatted citation sequence that is produced by citeproc
+ * @param {import("./citations.js").ParsedCitation[]} citations - the citations that were used to produce the formatted citation sequence
+ * @param {string[]} [formattedCitations] - individual formatted citations that were produced by citeproc for a 2nd pass attempt
+ * @returns { {citation, text}[] } an array of parts and citations that can be used to render it.
  */
 function parseFormattedCitationSequence (originalText, citations, formattedCitations) {
 	// Problem: citeproc returns the whole citation cluster, with brackets and separators
