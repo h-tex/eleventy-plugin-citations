@@ -1,6 +1,15 @@
 <dl class="references">
 	{% for reference in references %}
-		<dt><a href="#bib-{{ reference }}" class="reference" id="bib-{{ reference }}">{{ reference | bibliography_citation }}</a></dt>
-		<dd>{{ reference | bibliography_entry | safe }}</dd>
+		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
+		<dd>{{ reference | bibliography_entry | safe }}
+			{% if reference.citations %}
+				<small class="citation-links">
+					<em>Cited in</em>
+					{% for citation in reference.citations %}
+						<a href="#ref-bib-{{ reference.id }}-{{ citation }}" class="reference-citation">{{ loop.index }}</a>{{ "," if not loop.last }}
+					{% endfor %}
+				</small>
+			{% endif %}
+		</dd>
 	{% endfor %}
 </dl>

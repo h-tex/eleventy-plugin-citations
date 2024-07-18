@@ -59,13 +59,13 @@ export default function (config, {
 	config.addFilter("citations", renderCitations);
 	config.addPairedShortcode("citations", renderCitations);
 
-	config.addFilter("bibliography_citation", function (id) {
+	config.addFilter("bibliography_citation", function ({id}) {
 		let refs = references[this.page.outputPath];
 		let ret = refs.format(id);
 		return ret.citation ?? `[${id}]`;
 	});
 
-	config.addFilter("bibliography_entry", function (id) {
+	config.addFilter("bibliography_entry", function ({id}) {
 		let refs = references[this.page.outputPath];
 		let ret = refs.format(id);
 		return ret.entry ?? ret.html;

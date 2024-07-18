@@ -101,10 +101,10 @@ or a function that takes the citation info and returns the text of the formatted
 By default, the plugin will use [its internal citation template](_includes/_citations.njk) for this, which looks like this:
 
 ```njk
-<span class="citations">
+<span class="citations" id="citation-{{ uuid }}">
 	{%- for part in parts -%}
 		{%- if part.citation -%}
-			<a href="#bib-{{ part.citation.id }}" class="reference" id="ref-bib-{{ part.citation.id }}">{{ part.text }}</a>
+			<a href="#bib-{{ part.citation.id }}" class="reference" id="ref-bib-{{ part.citation.id }}-{{ uuid }}">{{ part.text }}</a>
 		{%- else -%}
 			{{ part | safe }}
 		{%- endif -%}
@@ -130,8 +130,28 @@ This is an example:
 
 <dl class="references">
 	{% for reference in references %}
-		<dt><a href="#bib-{{ reference }}" class="reference" id="bib-{{ reference }}">{{ reference | bibliography_citation }}</a></dt>
+		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
 		<dd>{{ reference | bibliography_entry | safe }}</dd>
+	{% endfor %}
+</dl>
+```
+
+This is a slightly more complex example, that includes backlinks to the citations:
+
+```njk
+<dl class="references">
+	{% for reference in references %}
+		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
+		<dd>{{ reference | bibliography_entry | safe }}
+			{% if reference.citations %}
+				<small class="citation-links">
+					<em>Cited in</em>
+					{% for citation in reference.citations %}
+						<a href="#ref-bib-{{ reference.id }}-{{ citation }}" class="reference-citation">{{ loop.index }}</a>{{ "," if not loop.last }}
+					{% endfor %}
+				</small>
+			{% endif %}
+		</dd>
 	{% endfor %}
 </dl>
 ```

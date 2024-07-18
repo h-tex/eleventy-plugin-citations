@@ -84,13 +84,19 @@ export default class Bibliography {
 	 */
 	cite (citations) {
 		citations = toArray(citations);
+		let references = [];
 
 		for (let citation of citations) {
 			this.citations.push(citation.id);
 
-			if (!this.references.includes(citation.id)) {
-				this.references.push(citation.id);
+			let reference = this.references.find(r => r.id === citation.id);
+
+			if (!reference) {
+				reference = {id: citation.id, citations: []};
+				this.references.push(reference);
 			}
+
+			references.push(reference);
 		}
 
 		if (!this.initialized) {
@@ -107,6 +113,10 @@ export default class Bibliography {
 		}, [], []);
 
 		let [, text, uuid] = result[0];
+
+		for (let reference of references) {
+			reference.citations.push(uuid);
+		}
 
 		let parts = parseFormattedCitationSequence(text, citations);
 

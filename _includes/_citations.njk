@@ -1,7 +1,7 @@
-<span class="citations">
+<span class="citations" id="citation-{{ uuid }}">
 	{%- for part in parts -%}
 		{%- if part.citation -%}
-			<a href="#bib-{{ part.citation.id }}" class="reference" id="ref-bib-{{ part.citation.id }}">{{ part.text }}</a>
+			<a href="#bib-{{ part.citation.id }}" class="reference" id="ref-bib-{{ part.citation.id }}-{{ uuid }}">{{ part.text }}</a>
 		{%- else -%}
 			{{ part | safe }}
 		{%- endif -%}
