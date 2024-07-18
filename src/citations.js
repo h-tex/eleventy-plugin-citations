@@ -81,6 +81,9 @@ export function parseCitationSequence (text) {
  * @returns {CitationSequence[]}
  */
 export function parse (content) {
+	// Remove comments while preserving indices
+	content = content.replace(/<!--.+?-->/gs, match => " ".repeat(match.length));
+
 	return [...content.matchAll(patterns.citations)].map(match => {
 		let raw = match[0];
 		return {
