@@ -22,7 +22,11 @@ function defaultRenderCitation (citationTemplate) {
 		let template = fs.readFileSync(__dirname + "/_includes/_citations.njk", "utf8");
 		return info => nunjucks.renderString(template, info);
 	}
+}
 
+let doiTemplates = {
+	url: '<a href="$&" class="doi">$&</a>',
+	id: '<a href="https://doi.org/$1" class="doi">$1</a>',
 }
 
 export default function (config, {
@@ -65,9 +69,16 @@ export default function (config, {
 		return ret.citation ?? `[${id}]`;
 	});
 
-	config.addFilter("bibliography_entry", function ({id}) {
+	config.addFilter("bibliography_entry", function ({id}, {doi_link} = {}) {
 		let refs = references[this.page.outputPath];
-		let ret = refs.format(id);
-		return ret.entry ?? ret.html;
+		let formatted = refs.format(id);
+		let ret = formatted.entry ?? formatted.html;
+
+		if (doi_link) {
+			let template = doiTemplates[doi_link] ?? doi_link;
+			ret = ret.replaceAll(/https?:\/\/doi\.org\/(10\.\d{4,9}\/[\w.:-]*\w)/gi, template);
+		}
+
+		return ret;
 	});
 }

@@ -121,9 +121,13 @@ which is basically equivalent to `referencesByPage[page.outputPath]`.
 Note that this is defined when we encounter the first reference, so on pages with no citations it will be `undefined`, not an empty array.
 - A `bibliography_citation` filter that takes an id as input and returns a formatted citation for use in the bibliography.
 - A `bibliography_entry` filter that takes an id as input and returns a formatted reference for use in the bibliography.
+It can optionally take an options parameter.
+Currently the only option is `doi_link` which will linkify any DOI links
+(use value `"id"` for the link text to be the id, `"url"` to just linkify the URL, or provide your own template).
 
-You can use these however you want to generate the bibliography.
-This is an example:
+You can use these however you want to generate the bibliography or just use [`_references.njk`](_includes/_references.njk) if you’re looking for something quick.
+
+This is an example of a more bare-bones bibliography:
 
 ```njk
 <h2>Bibliography</h2>
@@ -131,7 +135,7 @@ This is an example:
 <dl class="references">
 	{% for reference in references %}
 		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
-		<dd>{{ reference | bibliography_entry | safe }}</dd>
+		<dd>{{ reference | bibliography_entry({doi_link: "url"}) | safe }}</dd>
 	{% endfor %}
 </dl>
 ```
@@ -142,7 +146,7 @@ This is a slightly more complex example, that includes backlinks to the citation
 <dl class="references">
 	{% for reference in references %}
 		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
-		<dd>{{ reference | bibliography_entry | safe }}
+		<dd>{{ reference | bibliography_entry({doi_link: "id"}) | safe }}
 			{% if reference.citations %}
 				<small class="citation-links">
 					<em>Cited in</em>
