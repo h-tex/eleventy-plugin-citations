@@ -46,6 +46,10 @@ it returns a single string with all the citations in it and no metadata about wh
 This plugin does [**a lot of work**](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/Bibliography.js#L111-L128) to reverse engineer citeproc’s output to figure this out.
 Yes, even sequence ranges (e.g. `[1, 3–5, 18, 34–60]`) are correctly linked up!
 
+### Feature: Linkbacks from bibliography reference to citations in the text
+
+You can set up your template so that not only citations link to their bibliography entries, but bibliography entries link back to citations!
+
 ## Installation
 
 First, install with npm:
