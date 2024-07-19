@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import nunjucks from "nunjucks";
+import { RenderPlugin } from "@11ty/eleventy";
 
 import { toArray } from "./util.js";
 import Bibliography from "./Bibliography.js";
@@ -12,35 +12,45 @@ export { Bibliography };
 
 const __dirname = fileURLToPath(new URL("..", import.meta.url));
 
-function defaultRenderCitation (citationTemplate) {
-	if (citationTemplate) {
-		return info => nunjucks.render(citationTemplate, info);
-	}
-	else {
-		let template = fs.readFileSync(__dirname + "/_includes/_citations.njk", "utf8");
-		return info => nunjucks.renderString(template, info);
-	}
-}
-
 let doiTemplates = {
 	url: '<a href="$&" class="doi">$&</a>',
 	id: '<a href="https://doi.org/$1" class="doi">$1</a>',
 };
 
-export default function (config, {
-	citationTemplate,
-	citationRender = defaultRenderCitation(citationTemplate),
+export default async function (config, {
+	citationTemplate = __dirname + "/_includes/_citations.njk",
+	citationRender,
 	style, locale, // defaults set in Bibliography
 	bibliography: globalBibliography,
 } = {}) {
+<<<<<<< HEAD
 	const references = new Bibliographies({globalBibliography, style, locale});
 
 	function renderCitations (content) {
 		let refs = references.getOrCreate(this.page, this.ctx.bibliography);
+=======
+	let globalBibliography = toArray(bibliography);
+	let render = citationRender;
 
-		return citations.render(content, refs, {
-			render: citationRender,
-		});
+	async function renderCitations (content) {
+		let refs = references[this.page.outputPath];
+
+		if (!refs) {
+			// First citation we encounter on this page
+			let pageBibliography = toArray(this.ctx.bibliography);
+
+			refs = references[this.page.outputPath] = new Bibliography([...globalBibliography, ...pageBibliography], {style, locale});
+
+			Object.defineProperty(this.page, "references", {
+				get () {
+					return references[this.outputPath]?.references ?? [];
+				}
+			});
+		}
+>>>>>>> a437d88 (Allow for any 11ty-supported language for the citation template)
+
+		render ??= await RenderPlugin.File(citationTemplate);
+		return await citations.render(content, refs, { render });
 	}
 
 	config.addGlobalData("referencesByPage", references);

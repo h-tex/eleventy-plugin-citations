@@ -32,10 +32,14 @@
   },
   "homepage": "https://github.com/leaverou/eleventy-plugin-citations#readme",
   "devDependencies": {
+<<<<<<< HEAD
     "@11ty/eleventy": "^3.0.0-alpha.17",
+=======
+>>>>>>> a437d88 (Allow for any 11ty-supported language for the citation template)
     "release-it": "^17.4.1"
   },
   "dependencies": {
+    "@11ty/eleventy": "^3.0.0-alpha.14",
     "biblatex-csl-converter": "^2.1.0",
     "citeproc": "^2.4.63",
     "locale-en-us": "^0.0.2",

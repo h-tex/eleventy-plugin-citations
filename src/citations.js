@@ -93,13 +93,13 @@ export function parse (content) {
 	});
 }
 
-export function render (content, refs, options) {
+export async function render (content, refs, options) {
 	let citationSequences = parse(content);
 	let offset = 0;
 
 	for (let citationSequence of citationSequences) {
 		let formatted = citationSequence.formatted = refs.cite(citationSequence.parsed);
-		let rendered = options.render(formatted);
+		let rendered = await options.render(formatted);
 		content = content.slice(0, citationSequence.start + offset) + rendered + content.slice(citationSequence.end + offset);
 		offset += rendered.length - citationSequence.raw.length;
 	}
