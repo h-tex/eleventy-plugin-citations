@@ -76,7 +76,7 @@ export default function (config, {
 
 		if (doi_link) {
 			let template = doiTemplates[doi_link] ?? doi_link;
-			ret = ret.replaceAll(/https?:\/\/doi\.org\/(10\.\d{4,9}\/[\w.:-]*\w)/gi, template);
+			ret = ret.replaceAll(/https?:\/\/doi\.org\/(10\.\d{4,9}\/[\w.:\/-]*\w)/gi, template);
 		}
 
 		return ret;
