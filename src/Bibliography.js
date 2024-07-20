@@ -68,13 +68,15 @@ export default class Bibliography {
 		}, this.style);
 	}
 
+	#missingReferences = new Set();
+
 	getItem (id) {
 		if (this.data[id]) {
 			return this.data[id];
 		}
 
 		// Create dummy entry so that citeproc doesn’t choke
-		console.warn("Reference not found: ", id);
+		this.#missingReferences.add(id);
 		return {id, type: "article", title: `Missing entry: ${id}`};
 	}
 
@@ -147,7 +149,10 @@ export default class Bibliography {
 	}
 
 	build () {
-		// this.citeproc.updateItems(this.citations);
+		if (this.#missingReferences.size > 0) {
+			console.warn(`${ this.#missingReferences.size } missing references: ${[...this.#missingReferences].join(", ")}`);
+		}
+
 		let citeprocBibliography = this.citeproc.makeBibliography();
 		let ids = citeprocBibliography[0].entry_ids;
 		let entries = citeprocBibliography[1];
