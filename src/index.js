@@ -8,10 +8,6 @@ import * as citations from "./citations.js";
 
 export { Bibliography };
 
-// Eleventy deep clones plain objects, but we want an actual reference to these so we can modify them during templating.
-class ReferencesByPage {}
-const references = new ReferencesByPage();
-
 const __dirname = fileURLToPath(new URL("..", import.meta.url));
 
 function defaultRenderCitation (citationTemplate) {
@@ -35,6 +31,10 @@ export default function (config, {
 	style, locale, // defaults set in Bibliography
 	bibliography,
 } = {}) {
+	// Eleventy deep clones plain objects, but we want an actual reference to these so we can modify them during templating.
+	class ReferencesByPage {}
+	const references = new ReferencesByPage();
+
 	let globalBibliography = toArray(bibliography);
 
 	function renderCitations (content) {
