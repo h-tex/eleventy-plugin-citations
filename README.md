@@ -12,7 +12,7 @@ Your needs may be different, so I suggest you check them out too:
 
 | Package | Repo | Citation parser | Bbliography parser | Reference formatter |
 | ------- | ---- | --------------- | ------------- | ------------- |
-[eleventy-plugin-citations](https://www.npmjs.com/package/eleventy-plugin-citations) (this plugin) | [leaverou/eleventy-plugin-citations](https://github.com/leaverou/eleventy-plugin-citations) | [_(Custom)_](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/citations.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) [citeproc](https://www.npmjs.com/package/citeproc) | [citeproc](https://www.npmjs.com/package/citeproc) + Custom
+[eleventy-plugin-citations](https://www.npmjs.com/package/eleventy-plugin-citations) (this plugin) | [leaverou/eleventy-plugin-citations](https://github.com/leaverou/eleventy-plugin-citations) | [_(Custom)_](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/citations.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) | [citeproc](https://www.npmjs.com/package/citeproc) + [Custom](https://github.com/LeaVerou/eleventy-plugin-citations/blob/main/src/Bibliography.js) + Your template! |
 [@arothuis/markdown-it-biblatex](https://www.npmjs.com/package/@arothuis/markdown-it-biblatex)	| [arothuis/markdown-it-biblatex](https://github.com/arothuis/markdown-it-biblatex)		| [_(Custom)_](https://github.com/arothuis/markdown-it-biblatex/blob/main/src/parser.js) | [biblatex-csl-converter](https://www.npmjs.com/package/biblatex-csl-converter) | [citeproc](https://www.npmjs.com/package/citeproc) |
 [eleventy-plugin-citeproc](https://www.npmjs.com/package/eleventy-plugin-citeproc)				| [Myllaume/eleventy-plugin-citeproc](https://github.com/Myllaume/eleventy-plugin-citeproc)	| [@zettlr/citr](https://www.npmjs.com/package/@zettlr/citr) | N/A _(Only supports JSON)_ | [citeproc](https://www.npmjs.com/package/citeproc) |
 [eleventy-plugin-bibtex](https://www.npmjs.com/package/eleventy-plugin-bibtex)					| [Savjee/eleventy-plugin-bibtex](https://github.com/Savjee/eleventy-plugin-bibtex)		| N/A _(No citation support)_ | [citation-js](https://www.npmjs.com/package/citation-js) | [citation-js](https://www.npmjs.com/package/citation-js) |
@@ -49,6 +49,10 @@ Yes, even sequence ranges (e.g. `[1, 3–5, 18, 34–60]`) are correctly linked 
 ### Feature: Linkbacks from bibliography reference to citations in the text
 
 You can set up your template so that not only citations link to their bibliography entries, but bibliography entries link back to citations!
+
+## Known issues
+
+- Does not work well in 11ty watch mode
 
 ## Installation
 
