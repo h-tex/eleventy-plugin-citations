@@ -74,7 +74,7 @@ export default class Bibliography {
 		}
 
 		// Create dummy entry so that citeproc doesn’t choke
-		return {id, type: "article", title: id};
+		return {id, type: "article", title: `Missing entry: ${id}`};
 	}
 
 	/**
