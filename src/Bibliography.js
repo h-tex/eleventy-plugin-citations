@@ -74,6 +74,7 @@ export default class Bibliography {
 		}
 
 		// Create dummy entry so that citeproc doesn’t choke
+		console.warn("Reference not found: ", id);
 		return {id, type: "article", title: `Missing entry: ${id}`};
 	}
 
