@@ -104,7 +104,7 @@ export default class Bibliography {
 		}
 
 		if (this.formatted) {
-			console.warn(`Citing ${ids.join(", ")} after formatting the bibliography.`);
+			console.warn(`Citation ${citations.map(c => c.id).join(", ")} after the bibliography has been formatted.`);
 		}
 
 		let result = this.citeproc.appendCitationCluster({
