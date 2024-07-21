@@ -181,7 +181,8 @@ Currently the only option is `doi_link` which will linkify any DOI links
 
 You can use these however you want to generate the bibliography or just use the demo [`_references.njk`](demo/_includes/_references.njk) if you’re looking for something quick.
 
-This is an example of a more bare-bones bibliography:
+This is an example of a very bare-bones bibliography,
+similar to what LaTeX would generate:
 
 ```njk
 <h2>Bibliography</h2>
@@ -189,30 +190,13 @@ This is an example of a more bare-bones bibliography:
 <dl class="references">
 	{% for reference in references %}
 		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
-		<dd>{{ reference | bibliography_entry({doi_link: "url"}) | safe }}</dd>
+		<dd>{{ reference | bibliography_entry | safe }}</dd>
 	{% endfor %}
 </dl>
 ```
 
-This is a slightly more complex example, that includes backlinks to the citations:
-
-```njk
-<dl class="references">
-	{% for reference in references %}
-		<dt><a href="#bib-{{ reference.id }}" class="reference" id="bib-{{ reference.id }}">{{ reference | bibliography_citation }}</a></dt>
-		<dd>{{ reference | bibliography_entry({doi_link: "id"}) | safe }}
-			{% if reference.citations %}
-				<small class="citation-links">
-					<em>Cited in</em>
-					{% for citation in reference.citations %}
-						<a href="#ref-bib-{{ reference.id }}-{{ citation }}" class="reference-citation">{{ loop.index }}</a>{{ "," if not loop.last }}
-					{% endfor %}
-				</small>
-			{% endif %}
-		</dd>
-	{% endfor %}
-</dl>
-```
+You can check out the [demo reference template](demo/_includes/_references.njk) (and [its CSS](demo/assets/css/bib.css)) for a more complex example
+including backlinks, highlighting of missing entries, nicer DOI links, and more.
 
 ## Citation syntax
 

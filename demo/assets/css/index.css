@@ -24,3 +24,7 @@ body {
 		box-shadow: .05em .1em .8em -.5em black;
 	}
 }
+
+a:not(:hover) {
+	text-decoration: none;
+}
