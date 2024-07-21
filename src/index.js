@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import { fileURLToPath } from "url";
 import nunjucks from "nunjucks";
 
@@ -41,8 +42,11 @@ export default function (config, {
 		let refs = references[this.page.outputPath];
 
 		if (!refs) {
-			// First citation we encounter on this page
-			let pageBibliography = toArray(this.ctx.bibliography);
+			// This is the first citation we encounter on this page
+
+			let pageBibliography = toArray(this.ctx.bibliography)
+				// Resolve page bibliography relative to this.page.inputPath
+				.map(p => path.resolve(path.dirname(this.page.inputPath), p));
 
 			refs = references[this.page.outputPath] = new Bibliography([...globalBibliography, ...pageBibliography], {style, locale});
 
