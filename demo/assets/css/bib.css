@@ -3,6 +3,10 @@ dl.references {
 	grid-template-columns: auto 1fr;
 	gap: 1em;
 
+	> div {
+		display: contents;
+	}
+
 	dd {
 		margin: 0;
 	}
@@ -11,6 +15,10 @@ dl.references {
 .citation-links {
 	display: block;
 	font-size: var(--font-size-small);
+}
+
+.reference:is(.missing, .missing *) {
+	color: #900;
 }
 
 a.doi {

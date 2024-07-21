@@ -16,7 +16,7 @@ AFAIK this is the _only_ plugin that can do this.
 
 This is a citation that comes from a bibliography local to this Markdown file, which is not included in the global bibliography [@kowalzcykowski2009yourself].
 
-And this is a missing citation [@citation_needed].
+And this is a missing citation [@citation_needed]. Notice how it’s styled differently?
 
 ## Related Work
 

@@ -82,7 +82,6 @@ export default class Bibliography {
 		}
 
 		// Create dummy entry so that citeproc doesn’t choke
-		this.#missingReferences.add(id);
 		return {id, type: "article", title: `Missing entry: ${id}`};
 	}
 
@@ -95,21 +94,30 @@ export default class Bibliography {
 		citations = toArray(citations);
 		let references = [];
 
-		for (let citation of citations) {
-			this.citations.push(citation.id);
+		if (!this.initialized) {
+			this.init();
+		}
 
-			let reference = this.references.find(r => r.id === citation.id);
+		for (let citation of citations) {
+			let id = citation.id;
+			this.citations.push(id);
+
+			let reference = this.references.find(r => r.id === id);
 
 			if (!reference) {
-				reference = {id: citation.id, citations: []};
+				let data = this.data[id];
+				let missing = !data;
+
+				if (missing) {
+					citation.missing = true;
+					this.#missingReferences.add(id);
+				}
+
+				reference = {id, data, missing, citations: []};
 				this.references.push(reference);
 			}
 
 			references.push(reference);
-		}
-
-		if (!this.initialized) {
-			this.init();
 		}
 
 		if (this.formatted) {
