@@ -3,6 +3,31 @@
 This plugin parses Pandoc-style citations (`[@id1; @id2]`) in any input files and replaces them with formatted references.
 It also stores the references in data that can be used to display a bibliography however and wherever you want.
 
+## Contents <!-- omit from toc -->
+
+1. [Why another plugin?](#why-another-plugin)
+	1. [Feature: Bibliography based on what is actually used in the output file, not how you structure your input files](#feature-bibliography-based-on-what-is-actually-used-in-the-output-file-not-how-you-structure-your-input-files)
+	2. [Feature: Full templating customization](#feature-full-templating-customization)
+	3. [Feature: Multiple citation sequences that can be linked up correctly](#feature-multiple-citation-sequences-that-can-be-linked-up-correctly)
+	4. [Feature: Linkbacks from bibliography reference to citations in the text](#feature-linkbacks-from-bibliography-reference-to-citations-in-the-text)
+2. [Installation](#installation)
+3. [Usage](#usage)
+	1. [Linking to bibliography files](#linking-to-bibliography-files)
+	2. [Rendering citations in the text](#rendering-citations-in-the-text)
+	3. [Rendering the bibliography](#rendering-the-bibliography)
+4. [Citation syntax](#citation-syntax)
+5. [Confuguration Options](#confuguration-options)
+6. [CSL Styles and Locales](#csl-styles-and-locales)
+	1. [Styles](#styles)
+	2. [Locales](#locales)
+7. [Limitations \& Known issues](#limitations--known-issues)
+	1. [11ty watch mode](#11ty-watch-mode)
+	2. [Citation syntax](#citation-syntax-1)
+	3. [No support for 11ty \<= 2](#no-support-for-11ty--2)
+	4. [Relative paths are resolved relative to the project root](#relative-paths-are-resolved-relative-to-the-project-root)
+	5. [Bibliography cannot come before the last citation](#bibliography-cannot-come-before-the-last-citation)
+	6. [Low priority things](#low-priority-things)
+
 ## Why another plugin?
 
 I developed this plugin over the course of writing my PhD thesis, while being on a pretty tight schedule.
