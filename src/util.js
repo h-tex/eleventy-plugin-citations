@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 
 export function toArray(value) {
 	if (value === null || value === undefined) {
@@ -12,19 +13,23 @@ export function toArray(value) {
 	}
 }
 
-export function readTextFile (path, {description = "file", mustNotBeEmpty} = {}) {
+export function readTextFile (filePath, {description = "file", mustNotBeEmpty} = {}) {
 	let contents;
 
 	try {
-		contents = fs.readFileSync(path, "utf-8");
+		contents = fs.readFileSync(filePath, "utf-8");
 	}
 	catch (e) {
-		throw new Error(`Could not read ${description} ${path}. Error was: ${e.message}`, {cause: e});
+		if (e.code === "ENOENT") {
+			throw new Error(`Could not find ${description} ${ filePath } (${ path.resolve(filePath) }).`);
+		}
+
+		throw e;
 	}
 
 	if (mustNotBeEmpty && !contents) {
 		let Description = description[0].toUpperCase() + description.slice(1);
-		throw new Error(`${Description} ${path} cannot be empty.`);
+		throw new Error(`${Description} ${filePath} cannot be empty.`);
 	}
 
 	return contents;
