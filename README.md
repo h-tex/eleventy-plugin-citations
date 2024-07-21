@@ -3,6 +3,8 @@
 This plugin parses Pandoc-style citations (`[@id1; @id2]`) in any input files and replaces them with formatted references.
 It also stores the references in data that can be used to display a bibliography however and wherever you want.
 
+Demo: [code](https://github.com/LeaVerou/eleventy-plugin-citations/tree/main/demo) [HTML page](https://eleventy-plugin-citations.verou.me/)
+
 ## Contents <!-- omit from toc -->
 
 1. [Why another plugin?](#why-another-plugin)
