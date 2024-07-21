@@ -5,6 +5,7 @@ import nunjucks from "nunjucks";
 
 import { toArray } from "./util.js";
 import Bibliography from "./Bibliography.js";
+import Bibliographies from "./Bibliographies.js";
 import * as citations from "./citations.js";
 
 export { Bibliography };
@@ -24,7 +25,7 @@ function defaultRenderCitation (citationTemplate) {
 let doiTemplates = {
 	url: '<a href="$&" class="doi">$&</a>',
 	id: '<a href="https://doi.org/$1" class="doi">$1</a>',
-}
+};
 
 export default function (config, {
 	citationTemplate,
@@ -32,30 +33,12 @@ export default function (config, {
 	style, locale, // defaults set in Bibliography
 	bibliography,
 } = {}) {
-	// Eleventy deep clones plain objects, but we want an actual reference to these so we can modify them during templating.
-	class ReferencesByPage {}
-	const references = new ReferencesByPage();
-
 	let globalBibliography = toArray(bibliography);
+	// Eleventy deep clones plain objects, but we want an actual reference to these so we can modify them during templating.
+	const references = new Bibliographies({globalBibliography, style, locale});
 
 	function renderCitations (content) {
-		let refs = references[this.page.outputPath];
-
-		if (!refs) {
-			// This is the first citation we encounter on this page
-			let pageBibliography = toArray(this.ctx.bibliography);
-				// TODO Resolve page bibliography relative to this.page.inputPath
-				// Removed because rn it’s impossible to tell where each bibliography is coming from
-				// .map(p => path.resolve(path.dirname(this.page.inputPath), p));
-			let allBibliography = [...globalBibliography, ...pageBibliography];
-			refs = references[this.page.outputPath] = new Bibliography(allBibliography, {style, locale});
-
-			Object.defineProperty(this.page, "references", {
-				get () {
-					return references[this.outputPath]?.references ?? [];
-				}
-			});
-		}
+		let refs = references.getOrCreate(this.page, this.ctx.bibliography);
 
 		return citations.render(content, refs, {
 			render: citationRender,
@@ -63,18 +46,26 @@ export default function (config, {
 	}
 
 	config.addGlobalData("referencesByPage", references);
+	config.addGlobalData("eleventyComputed", {
+		references (data) {
+			if (data.page?.outputPath) {
+				let refs = references.getOrCreate(data.page, data.bibliography);
+				return refs?.references ?? [];
+			}
+		}
+	});
 
 	config.addFilter("citations", renderCitations);
 	config.addPairedShortcode("citations", renderCitations);
 
 	config.addFilter("bibliography_citation", function ({id}) {
-		let refs = references[this.page.outputPath];
+		let refs = references.get(this.page);
 		let ret = refs.format(id);
 		return ret.citation ?? `[${id}]`;
 	});
 
 	config.addFilter("bibliography_entry", function ({id}, {doi_link} = {}) {
-		let refs = references[this.page.outputPath];
+		let refs = references.get(this.page);
 		let formatted = refs.format(id);
 		let ret = formatted.entry ?? formatted.html;
 
@@ -84,5 +75,12 @@ export default function (config, {
 		}
 
 		return ret;
+	});
+
+	// Run me before --watch or --serve re-runs
+	config.on("eleventy.beforeWatch", async (changedFiles) => {
+		for (let inputPath of changedFiles) {
+			references.clear({inputPath});
+		}
 	});
 }

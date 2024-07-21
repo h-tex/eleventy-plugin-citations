@@ -40,11 +40,6 @@ export default class Bibliography {
 
 	constructor (paths, {style = defaultStyle, locale = locale_en_us}) {
 		this.paths = toArray(paths);
-
-		if (this.paths.length === 0) {
-			console.warn("No bibliography file(s) provided.");
-		}
-
 		this.style = style;
 		this.locale = locale;
 	}
@@ -58,6 +53,11 @@ export default class Bibliography {
 	 * @returns
 	 */
 	init () {
+		if (this.paths.length === 0) {
+			console.warn("No bibliography file(s) provided.");
+			return;
+		}
+
 		this.data = Object.assign({}, ...this.paths.map(path => Bibliography.readFile(path)));
 
 		if (typeof this.style === "string") {
@@ -154,6 +154,9 @@ export default class Bibliography {
 		return {parts, text, uuid, impliedCitations};
 	}
 
+	/**
+	 * Build bibliography entries from citations so far
+	 */
 	build () {
 		if (this.#missingReferences.size > 0) {
 			console.warn(`${ this.#missingReferences.size } missing references: ${[...this.#missingReferences].join(", ")}`);
@@ -174,6 +177,22 @@ export default class Bibliography {
 			ret.html = html;
 			this.formatted[id] = ret;
 		}
+	}
+
+	/**
+	 * Clear citations and references, but keep the same setup
+	 */
+	clear () {
+		if (!this.initialized) {
+			// Nothing to do
+			return;
+		}
+
+		this.references = [];
+		this.citations = [];
+		this.formatted = null;
+		this.#missingReferences.clear();
+		this.citeproc.updateItems([]);
 	}
 
 	format (id) {

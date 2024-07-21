@@ -3,7 +3,7 @@
 This plugin parses Pandoc-style citations (`[@id1; @id2]`) in any input files and replaces them with formatted references.
 It also stores the references in data that can be used to display a bibliography however and wherever you want.
 
-Demo: [code](https://github.com/LeaVerou/eleventy-plugin-citations/tree/main/demo) [HTML page](https://eleventy-plugin-citations.verou.me/)
+Demo: [code](https://github.com/LeaVerou/eleventy-plugin-citations/tree/main/demo) • [HTML page](https://eleventy-plugin-citations.verou.me/)
 
 ## Contents <!-- omit from toc -->
 
@@ -171,17 +171,15 @@ By default, the plugin will use [its internal citation template](_includes/_cita
 ### Rendering the bibliography
 
 The plugin adds the following:
-- A `referencesByPage` global data object that contains references for all pages, keyed by `page.outputpath`
-- A `references` property on `page` so you can refer to the page’s references via `page.references`,
-which is basically equivalent to `referencesByPage[page.outputPath]`.
-Note that this is defined when we encounter the first reference, so on pages with no citations it will be `undefined`, not an empty array.
+- A `references` computed data property that resolves to the page’s own references
+- A `referencesByPage` global data object that contains references for all pages. You can get another page’s references by using `referencesByPage.get(otherPage)` or `referencesByPage.get(otherPageOutputPath)`.
 - A `bibliography_citation` filter that takes an id as input and returns a formatted citation for use in the bibliography.
 - A `bibliography_entry` filter that takes an id as input and returns a formatted reference for use in the bibliography.
 It can optionally take an options parameter.
 Currently the only option is `doi_link` which will linkify any DOI links
 (use value `"id"` for the link text to be the id, `"url"` to just linkify the URL, or provide your own template).
 
-You can use these however you want to generate the bibliography or just use [`_references.njk`](_includes/_references.njk) if you’re looking for something quick.
+You can use these however you want to generate the bibliography or just use the demo [`_references.njk`](demo/_includes/_references.njk) if you’re looking for something quick.
 
 This is an example of a more bare-bones bibliography:
 
@@ -278,10 +276,7 @@ Note: Nature, APA, and Chicago use the same overall citation style and appear to
 
 ### 11ty watch mode
 
-The plugin does not currently work well at all in watch mode.
-Making edits will trigger errors about citations being added after the bibliography has been generated,
-editing bibliography files will not trigger a rebuild,
-and the bibliography does not even get generated.
+Editing bibliography files will not trigger a rebuild.
 
 ### Citation syntax
 

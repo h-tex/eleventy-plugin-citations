@@ -9,8 +9,6 @@
 <body>
 	{{ content | citations | safe }}
 
-	{% set references = page.references %}
-
 	{% if references.length > 0 -%}
 		<h2>Bibliography</h2>
 
