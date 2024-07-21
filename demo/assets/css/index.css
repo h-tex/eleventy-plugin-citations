@@ -1,0 +1,26 @@
+@import url("bib.css");
+
+:root {
+	--font-sans: system-ui, sans-serif;
+	--font-serif: ui-serif, Garamond, Baskerville, serif;
+
+	--font-size-small: 0.875rem;
+}
+
+html {
+	font: 400 100%/1.5 var(--font-serif);
+
+	@media screen {
+		background: hsl(220 13% 70%);
+	}
+}
+
+body {
+	@media screen {
+		max-width: 100ch;
+		margin: 1em auto;
+		padding: 3em;
+		background: canvas;
+		box-shadow: .05em .1em .8em -.5em black;
+	}
+}

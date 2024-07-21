@@ -1,0 +1,29 @@
+dl.references {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 1em;
+
+	dd {
+		margin: 0;
+	}
+}
+
+.citation-links {
+	display: block;
+	font-size: var(--font-size-small);
+}
+
+a.doi {
+	white-space: nowrap;
+	color: oklch(55% 0.1678 81.21);
+	font: 500 var(--font-size-small) var(--font-sans);
+
+	&::before {
+		content: "\A0";
+		background: url("../images/doi.svg") no-repeat;
+		display: inline-block;
+		vertical-align: -.15em;
+		width: 1em;
+		margin-inline: .4em .1em;
+	}
+}

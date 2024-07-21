@@ -276,7 +276,10 @@ Note: Nature, APA, and Chicago use the same overall citation style and appear to
 
 ### 11ty watch mode
 
-- Editing bibliography files does not trigger a rebuild.
+The plugin does not currently work well at all in watch mode.
+Making edits will trigger errors about citations being added after the bibliography has been generated,
+editing bibliography files will not trigger a rebuild,
+and the bibliography does not even get generated.
 
 ### Citation syntax
 

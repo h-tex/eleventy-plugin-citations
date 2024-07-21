@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Demo</title>
+	<link rel="stylesheet" href="assets/css/index.css">
+</head>
+<body>
+	{{ content | citations | safe }}
+
+	{% set references = page.references %}
+
+	{% if references.length > 0 -%}
+		<h2>Bibliography</h2>
+
+		{% include "_references.njk" %}
+	{%- endif %}
+</body>
+</html>
