@@ -31,10 +31,8 @@ export default function (config, {
 	citationTemplate,
 	citationRender = defaultRenderCitation(citationTemplate),
 	style, locale, // defaults set in Bibliography
-	bibliography,
+	bibliography: globalBibliography,
 } = {}) {
-	let globalBibliography = toArray(bibliography);
-	// Eleventy deep clones plain objects, but we want an actual reference to these so we can modify them during templating.
 	const references = new Bibliographies({globalBibliography, style, locale});
 
 	function renderCitations (content) {

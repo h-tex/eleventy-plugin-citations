@@ -5,7 +5,7 @@ const outputPaths = {};
 
 export default class BibliographyByPage {
 	constructor ({globalBibliography, style, locale}) {
-		this.globalBibliography = globalBibliography;
+		this.globalBibliography = toArray(globalBibliography);
 		this.style = style;
 		this.locale = locale;
 	}
