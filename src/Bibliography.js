@@ -7,7 +7,13 @@ import { toArray, readTextFile, splitLossless } from "./util.js";
 
 const patterns = {
 	referenceOutput: /^<div class="csl-entry">\s*<div class="csl-left-margin">\s*(?<citation>.+?)\s*<\/div>\s*<div class="csl-right-inline">\s*(?<entry>[\s\S]+?)\s*<\/div>\s*<\/div>$/,
-}
+};
+
+const suffixes = {
+	"(": ")",
+	"[": "]",
+	"<sup>": "</sup>",
+};
 
 export default class Bibliography {
 	/**
@@ -225,12 +231,6 @@ export default class Bibliography {
 
 		return this.data[path];
 	}
-}
-
-const suffixes = {
-	"(": ")",
-	"[": "]",
-	"<sup>": "</sup>",
 }
 
 /**
