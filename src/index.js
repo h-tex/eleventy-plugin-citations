@@ -43,12 +43,12 @@ export default function (config, {
 
 		if (!refs) {
 			// This is the first citation we encounter on this page
-
-			let pageBibliography = toArray(this.ctx.bibliography)
-				// Resolve page bibliography relative to this.page.inputPath
-				.map(p => path.resolve(path.dirname(this.page.inputPath), p));
-
-			refs = references[this.page.outputPath] = new Bibliography([...globalBibliography, ...pageBibliography], {style, locale});
+			let pageBibliography = toArray(this.ctx.bibliography);
+				// TODO Resolve page bibliography relative to this.page.inputPath
+				// Removed because rn it’s impossible to tell where each bibliography is coming from
+				// .map(p => path.resolve(path.dirname(this.page.inputPath), p));
+			let allBibliography = [...globalBibliography, ...pageBibliography];
+			refs = references[this.page.outputPath] = new Bibliography(allBibliography, {style, locale});
 
 			Object.defineProperty(this.page, "references", {
 				get () {

@@ -50,10 +50,6 @@ Yes, even sequence ranges (e.g. `[1, 3–5, 18, 34–60]`) are correctly linked 
 
 You can set up your template so that not only citations link to their bibliography entries, but bibliography entries link back to citations!
 
-## Known issues
-
-- Does not work well in 11ty watch mode
-
 ## Installation
 
 First, install with npm:
@@ -85,6 +81,31 @@ eleventyConfig.addPlugin(citations, {
 ```
 
 ## Usage
+
+### Linking to bibliography files
+
+You either use the `bibliography` plugin config option or `bibliography` as a data key
+(which could be global data, directory data, or even page data, you know the drill).
+
+E.g. you can have a `bibliography.json` global data file like this:
+
+```json
+[
+	"references.bib",
+	"references2.bib"
+]
+```
+
+or you can specify it in your frontmatter like this:
+
+```yaml
+bibliography: [references.bib, references2.bib]
+```
+
+Specifying values lower down the hierarchy does not override values higher up, the result is merged, i.e. uses *all* specified bib files.
+Strings are also supported, but are not recommended as they override their ancestor values.
+Arrays are also compatible with [Pandoc Citer](https://marketplace.visualstudio.com/items?itemName=notZaki.pandocciter)
+though keep in mind that [relative links are resolved differently](#relative-paths-are-resolved-relative-to-the-project-root).
 
 ### Rendering citations in the text
 
@@ -226,7 +247,11 @@ Note: Nature, APA, and Chicago use the same overall citation style and appear to
 | [de-DE](https://www.npmjs.com/package/locale-de-de) | 🚫 |
 | [es-ES](https://www.npmjs.com/package/locale-es-es) | 🚫 |
 
-## Limitations
+## Limitations & Known issues
+
+### 11ty watch mode
+
+- Editing bibliography files does not trigger a rebuild.
 
 ### Citation syntax
 
@@ -236,12 +261,20 @@ since citeproc provides chunks of text or HTML, with no granularity for the diff
 Locators are currently not supported in the citation syntax.
 They are mostly parsed, but not output.
 
-### Fundamental limitations
+### No support for 11ty <= 2
 
-- **The plugin only supports Eleventy v3 and up.**
 I _may_ be open in merging PRs to support Eleventy v2 if the changes are minimal,
 but I’m not interested in making extensive changes to the codebase to cater to the past.
-- **Bibliography cannot come before the last citation.**
+Just migrate to 11ty 3, it’s the future!
+
+### Relative paths are resolved relative to the project root
+
+Yes, it would be _much_ better if bibliography paths specified in a specific Markdown file resolved relative to that file,
+and is what [Pandoc Citer](https://marketplace.visualstudio.com/items?itemName=notZaki.pandocciter) expects too.
+However, given how the data cascade works in 11ty, this is not possible, as we don’t know where each entry is coming from so we can resolve it based on the file that defined it, and we definitely don’t want to be resolving global bibliography files relative to each file that uses them!
+
+### Bibliography cannot come before the last citation
+
 The `citations` filter and `{% citations %}` shortcode do double duty: they format the citations AND collect them so they can print out references.
 This means that when you print out `page.references`, you are only printing out references that have been collected by then.
 
