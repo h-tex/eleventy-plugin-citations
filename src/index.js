@@ -23,31 +23,11 @@ export default async function (config, {
 	style, locale, // defaults set in Bibliography
 	bibliography: globalBibliography,
 } = {}) {
-<<<<<<< HEAD
+	let render = citationRender;
 	const references = new Bibliographies({globalBibliography, style, locale});
 
-	function renderCitations (content) {
-		let refs = references.getOrCreate(this.page, this.ctx.bibliography);
-=======
-	let globalBibliography = toArray(bibliography);
-	let render = citationRender;
-
 	async function renderCitations (content) {
-		let refs = references[this.page.outputPath];
-
-		if (!refs) {
-			// First citation we encounter on this page
-			let pageBibliography = toArray(this.ctx.bibliography);
-
-			refs = references[this.page.outputPath] = new Bibliography([...globalBibliography, ...pageBibliography], {style, locale});
-
-			Object.defineProperty(this.page, "references", {
-				get () {
-					return references[this.outputPath]?.references ?? [];
-				}
-			});
-		}
->>>>>>> a437d88 (Allow for any 11ty-supported language for the citation template)
+		let refs = references.getOrCreate(this.page, this.ctx.bibliography);
 
 		render ??= await RenderPlugin.File(citationTemplate);
 		return await citations.render(content, refs, { render });
