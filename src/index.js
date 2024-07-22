@@ -67,6 +67,9 @@ export default function (config, {
 		let formatted = refs.format(id);
 		let ret = formatted.entry ?? formatted.html;
 
+		// --- is used to create em dashes in LaTeX
+		ret = ret.replaceAll(/-{3}/g, "—");
+
 		if (doi_link) {
 			let template = doiTemplates[doi_link] ?? doi_link;
 			ret = ret.replaceAll(/https?:\/\/doi\.org\/(10\.\d{4,9}\/[\w.:\/-]*\w)/gi, template);
