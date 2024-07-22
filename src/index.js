@@ -23,13 +23,15 @@ export default async function (config, {
 	style, locale, // defaults set in Bibliography
 	bibliography: globalBibliography,
 } = {}) {
-	let render = citationRender;
 	const references = new Bibliographies({globalBibliography, style, locale});
+	let fileRenderer;
+	const render = citationRender ?? (async function(...args){
+		fileRenderer ??= await RenderPlugin.File(citationTemplate);
+		return fileRenderer.call(this, ...args);
+	});
 
 	async function renderCitations (content) {
 		let refs = references.getOrCreate(this.page, this.ctx.bibliography);
-
-		render ??= await RenderPlugin.File(citationTemplate);
 		return await citations.render(content, refs, { render });
 	}
 
