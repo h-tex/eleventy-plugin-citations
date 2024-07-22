@@ -17,7 +17,7 @@ let doiTemplates = {
 	id: '<a href="https://doi.org/$1" class="doi">$1</a>',
 };
 
-export default async function (config, {
+export default function (config, {
 	citationTemplate = __dirname + "/_includes/_citations.njk",
 	citationRender,
 	style, locale, // defaults set in Bibliography
