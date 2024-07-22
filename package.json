@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-citations",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Citations & Bibliography for 11ty",
   "type": "module",
   "main": "src/index.js",
