@@ -1,15 +1,11 @@
 {
   "name": "eleventy-plugin-citations",
-  "version": "0.1.4",
+  "version": "0.1.1",
   "description": "Citations & Bibliography for 11ty",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
     "release": "npx release-it",
-    "build:demo": "npx @11ty/eleventy --config=demo/eleventy.js --quiet",
-    "watch": "npm run watch:demo",
-    "watch:demo": "npx @11ty/eleventy --config=demo/eleventy.js --quiet --watch",
-    "build": "npm run build:demo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -32,14 +28,7 @@
   },
   "homepage": "https://github.com/leaverou/eleventy-plugin-citations#readme",
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "@11ty/eleventy": "^3.0.0-alpha.17",
-=======
->>>>>>> a437d88 (Allow for any 11ty-supported language for the citation template)
-=======
     "@11ty/eleventy": "^3.0.0-alpha.14",
->>>>>>> ac7706d (Restore package.json and lockfile)
     "release-it": "^17.4.1"
   },
   "dependencies": {
