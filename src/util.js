@@ -22,7 +22,14 @@ export function readTextFile (filePath, {description = "file", mustNotBeEmpty} =
 	catch (e) {
 		if (e.code === "ENOENT") {
 			let absolutePath = path.resolve(filePath);
-			throw new Error(`Could not find ${description} ${ filePath }${ absolutePath !== filePath ? ` (${ absolutePath })` : ""}.`);
+			let msg = `Could not find ${description} ${ filePath }${ absolutePath !== filePath ? ` (${ absolutePath })` : ""}.`;
+
+			if (mustNotBeEmpty) {
+				throw new Error(msg)
+			}
+
+			console.warn(msg);
+			return null;
 		}
 
 		throw e;

@@ -224,9 +224,14 @@ export default class Bibliography {
 	 * @returns {object}
 	 */
 	static readFile (path) {
-		if (!this.data[path]) {
+		if (this.data[path] === undefined) {
 			try {
-				let raw = readTextFile(path, {description: "bibliography file", mustNotBeEmpty: true});
+				let raw = readTextFile(path, { description: "bibliography file" });
+
+				if (raw === null) {
+					// File not found, warning already shown, just return empty object
+					return {};
+				}
 				let parsed;
 
 				try {
