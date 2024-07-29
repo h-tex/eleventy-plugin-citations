@@ -44,7 +44,10 @@ export default function (config, {
 	}
 
 	config.addGlobalData("referencesByPage", references);
+
+	let eleventyComputed = config.globalData.eleventyComputed ?? {};
 	config.addGlobalData("eleventyComputed", {
+		...eleventyComputed,
 		references (data) {
 			if (data.page?.outputPath) {
 				let refs = references.getOrCreate(data.page, data.bibliography);
