@@ -1,7 +1,7 @@
 import Bibliography from "./Bibliography.js";
 import { toArray } from "./util.js";
 
-const outputPaths = {};
+const urls = {};
 
 export default class BibliographyByPage {
 	constructor ({globalBibliography, style, locale}) {
@@ -11,9 +11,9 @@ export default class BibliographyByPage {
 	}
 
 	create (page, pageBibliography) {
-		let { inputPath, outputPath } = page;
+		let { inputPath, url } = page;
 
-		if (!outputPath) {
+		if (!url) {
 			throw new Error("Invalid page object:", page);
 		}
 
@@ -21,8 +21,13 @@ export default class BibliographyByPage {
 		// TODO Resolve page bibliography relative to this.page.inputPath
 		// Removed because rn it’s impossible to tell where each bibliography is coming from
 		let allBibliography = [...this.globalBibliography, ...pageBibliography];
-		outputPaths[inputPath] = outputPath;
-		return this[outputPath] = new Bibliography(allBibliography, this);
+		urls[inputPath] = url;
+
+		return this[url] = new Bibliography(allBibliography, {
+			style: this.style,
+			locale: this.locale,
+			scope: url
+		});
 	}
 
 	/**
@@ -31,13 +36,13 @@ export default class BibliographyByPage {
 	 * @returns
 	 */
 	get (ref) {
-		let outputPath = getOutputPath(ref);
+		let url = getURL(ref);
 
-		if (!outputPath) {
+		if (!url) {
 			return;
 		}
 
-		let ret = this[outputPath];
+		let ret = this[url];
 
 		return ret;
 	}
@@ -46,15 +51,15 @@ export default class BibliographyByPage {
 		return this.get(page) ?? this.create(page, ...createArgs);
 	}
 
-	clear ({inputPath, outputPath}) {
-		outputPath ||= outputPaths[inputPath];
+	clear ({inputPath, url}) {
+		url ||= urls[inputPath];
 
-		if (outputPath) {
-			this[outputPath]?.clear();
+		if (url) {
+			this[url]?.clear();
 		}
 	}
 }
 
-function getOutputPath (ref) {
-	return typeof ref === "string" ? ref : ref?.outputPath;
+function getURL (ref) {
+	return typeof ref === "string" ? ref : ref?.url;
 }

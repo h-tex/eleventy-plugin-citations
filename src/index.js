@@ -49,7 +49,7 @@ export default function (config, {
 	config.addGlobalData("eleventyComputed", {
 		...eleventyComputed,
 		references (data) {
-			if (data.page?.outputPath) {
+			if (data.page?.url) {
 				let refs = references.getOrCreate(data.page, data.bibliography);
 				return refs?.references ?? [];
 			}

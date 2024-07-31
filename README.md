@@ -54,7 +54,7 @@ Most plugins were extending `markdown-it`, and thus were unaware of the broader 
 Now, you could probably do some weird gymnastics to compile a Markdown file with all your content that you then feed back into eleventy
 (thanks [@DmitrySharabin](https://github.com/DmitrySharabin) for the idea!), but that sounded quite contorted.
 
-The way this plugin works, collected references are keyed by `outputPath` so you can have separate bibliographies
+The way this plugin works, collected references are keyed by `page.url` so you can have separate bibliographies
 for separate files, based on what is actually used on each file.
 This also means you can call it as many times as you want on the same content and it will not distort the output.
 
@@ -172,7 +172,7 @@ By default, the plugin will use [its internal citation template](_includes/_cita
 
 The plugin adds the following:
 - A `references` computed data property that resolves to the page’s own references
-- A `referencesByPage` global data object that contains references for all pages. You can get another page’s references by using `referencesByPage.get(otherPage)` or `referencesByPage.get(otherPageOutputPath)`.
+- A `referencesByPage` global data object that contains references for all pages. You can get another page’s references by using `referencesByPage.get(otherPage)` or `referencesByPage.get(otherPageURL)`.
 - A `bibliography_citation` filter that takes an id as input and returns a formatted citation for use in the bibliography.
 - A `bibliography_entry` filter that takes an id as input and returns a formatted reference for use in the bibliography.
 It can optionally take an options parameter.

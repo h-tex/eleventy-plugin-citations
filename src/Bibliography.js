@@ -38,10 +38,11 @@ export default class Bibliography {
 	 */
 	formatted;
 
-	constructor (paths, {style = defaultStyle, locale = locale_en_us}) {
+	constructor (paths, { style = defaultStyle, locale = locale_en_us, scope }) {
 		this.paths = toArray(paths);
 		this.style = style;
 		this.locale = locale;
+		this.scope = scope;
 	}
 
 	get initialized () {
