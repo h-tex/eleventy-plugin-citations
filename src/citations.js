@@ -26,7 +26,7 @@ export function parseCitation (text) {
 	let match = text.match(patterns.citationDetails);
 
 	if (!match) {
-		console.warn(`[eleventy-plugin-citations] Skipping invalid citation: ${text}`);
+		console.warn(`[citations] Skipping invalid citation: ${text}`);
 		return null;
 	}
 

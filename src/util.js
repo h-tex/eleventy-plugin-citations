@@ -28,7 +28,7 @@ export function readTextFile (filePath, {description = "file", mustNotBeEmpty} =
 				throw new Error(msg)
 			}
 
-			console.warn(msg);
+			console.warn("[citations] " + msg);
 			return null;
 		}
 

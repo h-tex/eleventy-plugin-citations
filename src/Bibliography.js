@@ -55,7 +55,7 @@ export default class Bibliography {
 	 */
 	init () {
 		if (this.paths.length === 0) {
-			console.warn("No bibliography file(s) provided.");
+			console.warn("[citations] No bibliography file(s) provided.");
 			return;
 		}
 
@@ -122,7 +122,7 @@ export default class Bibliography {
 		}
 
 		if (this.formatted) {
-			console.warn(`Citation ${citations.map(c => c.id).join(", ")} after the bibliography has been formatted.`);
+			console.warn(`[citations] Citation ${citations.map(c => c.id).join(", ")} found after the bibliography has been formatted. It will not be included.`);
 		}
 
 		let result = this.citeproc.appendCitationCluster({
@@ -168,7 +168,8 @@ export default class Bibliography {
 	 */
 	build () {
 		if (this.#missingReferences.size > 0) {
-			console.warn(`${ this.#missingReferences.size } missing references: ${[...this.#missingReferences].join(", ")}`);
+			let inScope = this.scope ? ` in ${this.scope}` : "";
+			console.warn(`[citations] ${ this.#missingReferences.size } missing references${ inScope }: ${[...this.#missingReferences].join(", ")}`);
 		}
 
 		let citeprocBibliography = this.citeproc.makeBibliography();
