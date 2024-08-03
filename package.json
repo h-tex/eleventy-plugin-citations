@@ -32,8 +32,11 @@
   },
   "homepage": "https://github.com/leaverou/eleventy-plugin-citations#readme",
   "devDependencies": {
-    "@11ty/eleventy": "^3.0.0-alpha.17",
     "release-it": "^17.4.1"
+  },
+  "peerDependencies": {
+    "@11ty/eleventy": "^3.0.0-beta.1",
+    "nunjucks": "^3"
   },
   "dependencies": {
     "biblatex-csl-converter": "^2.1.0",
