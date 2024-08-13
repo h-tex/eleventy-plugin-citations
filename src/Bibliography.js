@@ -138,11 +138,14 @@ export default class Bibliography {
 
 		let parts = parseFormattedCitationSequence(text, citations);
 
-		if (parts === null) {
+		if (parts === null || parts.length > 3) {
 			// Sequence could not be parsed into parts directly
 			// Because not all citations are present in the output
 			// E.g. [1, 3–5, 18, 34–60]
 			// We need to help it along by serializing each citation individually and passing it to the function
+			// Why “parts.length > 3”? It covers cases like [1, 18, 32]. In those cases, we should follow this path too
+			// E.g. [@foo, @bar] and [@bar, @foo] might produce the same output — [1, 3]
+			// But “1” and “3” should be linked to different bibliography references in both cases
 			let formattedCitations = citations.map(c => {
 				let result = this.citeproc.appendCitationCluster({
 					citationItems: [c],
