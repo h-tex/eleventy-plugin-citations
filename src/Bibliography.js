@@ -138,7 +138,7 @@ export default class Bibliography {
 
 		let parts;
 		if (citations.length > 1) {
-			// Sequence could not be parsed into parts directly
+			// Sequence cannot be parsed into parts directly
 			// Because not all citations are present in the output
 			// E.g. [1, 3–5, 18, 34–60]
 			// We need to help it along by serializing each citation individually and passing it to the function
