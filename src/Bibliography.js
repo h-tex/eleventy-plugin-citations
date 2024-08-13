@@ -136,8 +136,7 @@ export default class Bibliography {
 			reference.citations.push(uuid);
 		}
 
-		let parts = parseFormattedCitationSequence(text, citations);
-
+		let parts;
 		if (citations.length > 1) {
 			// Sequence could not be parsed into parts directly
 			// Because not all citations are present in the output
@@ -155,6 +154,9 @@ export default class Bibliography {
 			});
 
 			parts = parseFormattedCitationSequence(text, citations, formattedCitations);
+		}
+		else {
+			parts = parseFormattedCitationSequence(text, citations);
 		}
 
 		let impliedCitations = citations.filter(c => !parts.some(part => part.citation === c));
