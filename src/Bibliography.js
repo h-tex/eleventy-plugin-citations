@@ -138,13 +138,10 @@ export default class Bibliography {
 
 		let parts;
 		if (citations.length > 1) {
-			// Sequence cannot be parsed into parts directly
-			// Because not all citations are present in the output
-			// E.g. [1, 3–5, 18, 34–60]
-			// We need to help it along by serializing each citation individually and passing it to the function
-			// We should also correctly handle cases like [1, 18, 32]
-			// E.g. [@foo, @bar] and [@bar, @foo] might produce the same output — [1, 3]
-			// But “1” and “3” should be linked to different bibliography references in both cases
+			// Sequences should be handled differently because:
+			// — not all citations might be present in the output, e.g. [1, 3–5, 18, 34–60]
+			// — they might produce the same output but should be linked to different bibliography items, e.g., [@foo, @bar] and [@bar, @foo]
+			// So, we need to help it along by serializing each citation individually and passing it to the function
 			let formattedCitations = citations.map(c => {
 				let result = this.citeproc.appendCitationCluster({
 					citationItems: [c],
