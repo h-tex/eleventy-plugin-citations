@@ -136,13 +136,12 @@ export default class Bibliography {
 			reference.citations.push(uuid);
 		}
 
-		let parts = parseFormattedCitationSequence(text, citations);
-
-		if (parts === null) {
-			// Sequence could not be parsed into parts directly
-			// Because not all citations are present in the output
-			// E.g. [1, 3–5, 18, 34–60]
-			// We need to help it along by serializing each citation individually and passing it to the function
+		let parts;
+		if (citations.length > 1) {
+			// Sequences should be handled differently because:
+			// — not all citations might be present in the output, e.g. [1, 3–5, 18, 34–60]
+			// — they might produce the same output but should be linked to different bibliography items, e.g., [@foo, @bar] and [@bar, @foo]
+			// So, we need to help it along by serializing each citation individually and passing it to the function
 			let formattedCitations = citations.map(c => {
 				let result = this.citeproc.appendCitationCluster({
 					citationItems: [c],
@@ -152,6 +151,9 @@ export default class Bibliography {
 			});
 
 			parts = parseFormattedCitationSequence(text, citations, formattedCitations);
+		}
+		else {
+			parts = parseFormattedCitationSequence(text, citations);
 		}
 
 		let impliedCitations = citations.filter(c => !parts.some(part => part.citation === c));
