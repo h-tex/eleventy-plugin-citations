@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leaverou/eleventy-plugin-citations.git"
+    "url": "git+https://github.com/h-tex/eleventy-plugin-citations.git"
   },
   "keywords": [
     "citeproc",
@@ -28,9 +28,9 @@
   "author": "Lea Verou",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leaverou/eleventy-plugin-citations/issues"
+    "url": "https://github.com/h-tex/eleventy-plugin-citations/issues"
   },
-  "homepage": "https://github.com/leaverou/eleventy-plugin-citations#readme",
+  "homepage": "https://github.com/h-tex/eleventy-plugin-citations#readme",
   "devDependencies": {
     "release-it": "^17.4.1"
   },
