@@ -38,6 +38,11 @@
     "@11ty/eleventy": "^3.0.0-beta.1",
     "nunjucks": "^3"
   },
+  "overrides": {
+    "@11ty/eleventy": {
+      "liquidjs": "10.16.4"
+    }
+  },
   "dependencies": {
     "biblatex-csl-converter": "github:h-tex/biblatex-csl-converter",
     "citeproc": "^2.4.63",
