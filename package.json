@@ -44,7 +44,7 @@
     }
   },
   "dependencies": {
-    "biblatex-csl-converter": "github:h-tex/biblatex-csl-converter",
+    "bibliojson": "^4.0.4",
     "citeproc": "^2.4.63",
     "locale-en-us": "^0.0.2",
     "style-vancouver": "^0.0.2"
