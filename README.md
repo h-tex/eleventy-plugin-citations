@@ -216,7 +216,7 @@ We also parse the same citation flags from [`markdown-it-biblatex`](https://gith
 | `[see @doe99]` | Prefix | 🚫 | 🚫 |
 | `[@doe99, and *passim*]` | Suffix | 🚫 | 🚫 |
 
-## Confuguration Options
+## Configuration Options
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
