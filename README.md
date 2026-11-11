@@ -18,7 +18,7 @@ Demo: [code](https://github.com/LeaVerou/eleventy-plugin-citations/tree/main/dem
 	2. [Rendering citations in the text](#rendering-citations-in-the-text)
 	3. [Rendering the bibliography](#rendering-the-bibliography)
 4. [Citation syntax](#citation-syntax)
-5. [Confuguration Options](#confuguration-options)
+5. [Configuration Options](#configuration-options)
 6. [CSL Styles and Locales](#csl-styles-and-locales)
 	1. [Styles](#styles)
 	2. [Locales](#locales)
